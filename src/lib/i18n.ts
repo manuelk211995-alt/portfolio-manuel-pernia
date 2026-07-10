@@ -18,8 +18,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     "hero.copied": "Copied!",
 
     "about.title": "About Me",
-    "about.p1": "Specialized in building full-stack web applications and intelligent automation tools. From UI design to API development, data architecture, and real-time extraction (web scraping), I focus on delivering scalable, production-ready solutions.",
-    "about.p2a": "I build modern, efficient systems with Python, Flask, JavaScript, React, Node.js, and databases. I stand out by writing clean code and deploying cloud automations — like my active deal-scraping platform integrated with Telegram.",
+    "about.p1": "Specialized in building comprehensive web applications. With an approach oriented to delivering scalable, production-ready solutions, the scope spans from interface design to API development and data architecture.",
+    "about.p2a": "Capable of developing modern systems using Python, Flask, JavaScript, React, Node.js, and databases. Rigorous in writing clean code and implementing efficient solutions.",
     "skills.title": "Skills",
     "skills.frontend.name": "Frontend",
     "skills.backend.name": "Backend",

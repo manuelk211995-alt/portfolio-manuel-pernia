@@ -18,7 +18,7 @@ const projects = [
     tags: ["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Docker"],
     codeUrl: "https://github.com/manuelk211995-alt/CalcuVolt",
     demoUrl: "#",
-    image: null,
+    image: "/calcuvolt.png",
   },
   {
     title: "Dashboard Analytics",
