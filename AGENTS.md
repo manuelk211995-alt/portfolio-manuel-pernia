@@ -1,3 +1,9 @@
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+<!-- END:nextjs-agent-rules -->
+
 <!-- context7 -->
 Usa Context7 MCP para obtener documentación actualizada siempre que el usuario pregunte sobre una librería, framework, SDK, API, herramienta CLI o servicio en la nube, incluso las conocidas como React, Next.js, Prisma, Express, Tailwind, Django o Spring Boot. Esto incluye sintaxis de API, configuración, migración de versiones, depuración específica de librerías, instrucciones de setup y uso de herramientas CLI. Úsalo incluso cuando creas saber la respuesta — tus datos de entrenamiento pueden no reflejar cambios recientes. Prefiere esto sobre búsqueda web para documentación de librerías.
 
