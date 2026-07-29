@@ -80,31 +80,32 @@ const skills = [
 ]
 
 import { useI18n } from "./LanguageProvider"
+import { useReveal } from "@/lib/useReveal"
 
 export function About() {
   const { t } = useI18n()
+  const { ref, isVisible } = useReveal()
   return (
-    <section id="about" className="relative flex min-h-screen flex-col justify-center overflow-hidden px-6 py-24 bg-muted/50 scroll-mt-24">
-      <div className="pointer-events-none absolute -top-40 -left-40 size-96 rounded-full bg-[radial-gradient(circle,rgba(108,99,255,0.06)_0%,transparent_70%)]" />
-      <div className="pointer-events-none absolute -bottom-40 -right-40 size-96 rounded-full bg-[radial-gradient(circle,rgba(224,64,160,0.05)_0%,transparent_70%)]" />
-      <div className="mx-auto max-w-6xl relative">
+    <section id="about" className="relative flex min-h-screen flex-col justify-center overflow-hidden px-6 py-24 bg-muted snap-start">
+      <div ref={ref} className={`mx-auto max-w-6xl relative reveal ${isVisible ? "visible" : ""}`}>
         <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
           {t("about.title")}
-          <span className="mx-auto mt-3 block h-1 w-16 rounded-full bg-gradient-to-r from-[#6c63ff] to-[#e040a0]" />
+          <span className="mx-auto mt-3 block h-1 w-16 rounded-full bg-foreground/20" />
         </h2>
         <p className="mx-auto mb-16 max-w-3xl text-center text-base leading-relaxed text-muted-foreground md:text-lg">
-          {t("about.p1")} {t("about.p2a")}
+          {t("about.p1")} {t("about.p2")}
         </p>
-        <div id="skills" className="scroll-mt-24">
+        <div id="skills">
           <h3 className="mb-8 text-center text-lg font-bold md:text-xl">
             {t("skills.title")}
-            <span className="mx-auto mt-3 block h-1 w-16 rounded-full bg-gradient-to-r from-[#6c63ff] to-[#e040a0]" />
+            <span className="mx-auto mt-3 block h-1 w-16 rounded-full bg-foreground/20" />
           </h3>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {skills.map((skill) => (
               <div
                 key={skill.nameKey}
-                className="rounded-xl border border-border bg-card p-8 text-center transition-all hover:-translate-y-2 hover:border-primary hover:shadow-lg hover:shadow-primary/15"
+                className="rounded-xl border border-border bg-card p-8 text-center shadow-sm transition-all hover:-translate-y-2 hover:border-foreground/20 hover:shadow-md hover:shadow-foreground/10"
+
               >
                 <h4 className="mb-5 text-lg font-semibold">{t(skill.nameKey)}</h4>
                 <div className="flex flex-wrap items-center justify-center gap-4">

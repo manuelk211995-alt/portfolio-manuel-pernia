@@ -8,17 +8,14 @@ export function LanguageToggle() {
   const { language, toggleLanguage } = useI18n()
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true))
-    return () => cancelAnimationFrame(id)
-  }, [])
+  useEffect(() => { setMounted(true) }, [])
 
   return (
     <Button
       variant="ghost"
       size="icon"
       onClick={toggleLanguage}
-      aria-label="Toggle language"
+      aria-label={language === "en" ? "Switch to Spanish" : "Switch to English"}
       className="text-xs font-semibold"
     >
       {mounted ? (language === "es" ? "EN" : "ES") : "EN"}

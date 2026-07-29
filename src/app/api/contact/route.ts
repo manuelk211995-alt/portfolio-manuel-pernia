@@ -1,5 +1,14 @@
 import { NextResponse } from "next/server"
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+}
+
 export async function POST(request: Request) {
   try {
     const { name, email, message } = await request.json()
@@ -27,13 +36,13 @@ export async function POST(request: Request) {
     const { error } = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
       to: "manuelk211995@gmail.com",
-      subject: `Portfolio Contact — ${name}`,
+      subject: `Portfolio Contact — ${escapeHtml(name)}`,
       html: `
         <h2>New message from portfolio</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
         <p><strong>Message:</strong></p>
-        <p>${message}</p>
+        <p>${escapeHtml(message)}</p>
       `,
     })
 
