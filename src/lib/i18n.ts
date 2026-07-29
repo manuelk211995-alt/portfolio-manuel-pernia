@@ -26,6 +26,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "projects.economos.desc": "Personal financial control panel with real-time asset tracking, automated trading signals, AI assistant powered by Google Gemini, and multi-bank management.",
     "projects.calcuvolt.desc": "Professional electrical calculation app with support for NEC and REBT standards. Calculates conductor gauge, voltage drop, and short circuit. PWA with dark mode, JWT authentication, and PDF reports by email.",
     "projects.dashboard.desc": "Interactive dashboard with real-time charts and data export.",
+    "projects.portfolio.desc": "Modern portfolio built with Next.js 16 and React 19, featuring dark/light mode, i18n, and smooth scroll animations.",
     "projects.code": "Code",
     "projects.demo": "Demo",
 
@@ -67,6 +68,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "projects.economos.desc": "Panel de control financiero personal con seguimiento de activos en tiempo real, señales de trading automatizadas, asistente IA con Google Gemini y gestión multibanco.",
     "projects.calcuvolt.desc": "Aplicación de cálculo eléctrico profesional con soporte para normativas NEC y REBT. Calcula calibre de conductores, caída de tensión y cortocircuito. PWA con modo oscuro, autenticación JWT y reportes PDF por correo.",
     "projects.dashboard.desc": "Panel interactivo con gráficos en tiempo real y exportación de datos.",
+    "projects.portfolio.desc": "Portfolio moderno construido con Next.js 16 y React 19, con modo oscuro/claro, i18n y animaciones de scroll suaves.",
     "projects.code": "Código",
     "projects.demo": "Demo",
 

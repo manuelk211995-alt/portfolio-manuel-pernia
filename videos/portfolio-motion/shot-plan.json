@@ -1,0 +1,46 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 10,
+  "fps": 60,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "SaaS modern aesthetic, dark background, clean typography, high contrast, fluid motion",
+  "palette": ["#0a0a0a", "#f5f5f5", "#3b82f6", "#a3a3a3"],
+  "font": "Geist, Inter, system-ui, sans-serif",
+  "beats": [0, 15, 45, 60],
+  "export": "mp4",
+  "asset_needs": [],
+  "content": {
+    "scenes": [
+      {
+        "id": "hero",
+        "start": 0,
+        "end": 3,
+        "text": "Manuel Pernia",
+        "subtitle": "Full Stack Developer",
+        "emphasis_words": [],
+        "emotion": "professional, confident",
+        "motion": "slide_bottom, scale_grow"
+      },
+      {
+        "id": "features",
+        "start": 3,
+        "end": 7,
+        "text": "Key capabilities",
+        "subtitle": "Modern Web Apps · Scalable Backend · Clean Code",
+        "emphasis_words": ["React", "Next.js", "TypeScript", "Node.js", "Python"],
+        "emotion": "dynamic, capable",
+        "motion": "slide_bottom, word_reveal"
+      },
+      {
+        "id": "cta",
+        "start": 7,
+        "end": 10,
+        "text": "Manuel Pernia",
+        "subtitle": "manuelpernia.dev",
+        "emphasis_words": [],
+        "emotion": "closing, bold",
+        "motion": "fade_blur, scale_punch"
+      }
+    ]
+  }
+}
