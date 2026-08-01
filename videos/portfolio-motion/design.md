@@ -27,32 +27,45 @@ instrucciones: |
 
 ---
 
+## Paleta — Color Hunt (fuente: https://colorhunt.co/palette/0000002222221dcd9f169976)
+
+| Hex       | Rol                        |
+| --------- | -------------------------- |
+| `#000000` | Negro principal (bg)       |
+| `#222222` | Gris oscuro (card/muted)   |
+| `#1DCD9F` | Verde menta (acento/CTA)   |
+| `#169976` | Verde oscuro (acento var)  |
+
 ## Paleta — Dark Mode (usada en vídeo)
 
 | Token               | Hex       | Descripción               |
 | ------------------- | --------- | ------------------------- |
-| `--background`      | `#0a0a0a` | Fondo principal           |
-| `--foreground`      | `#f5f5f5` | Texto principal           |
-| `--card`            | `#141414` | Superficie de tarjeta     |
-| `--card-foreground` | `#f5f5f5` | Texto sobre card          |
-| `--muted`           | `#181818` | Fondo secundario          |
-| `--muted-foreground`| `#a3a3a3` | Texto secundario          |
-| `--border`          | `#262626` | Bordes                    |
-| `--accent`          | `#f5f5f5` | Acento                    |
-| `--ring`            | `#f5f5f5` | Focus ring                |
-| `--primary`         | `#f5f5f5` | Primario                  |
-| `--primary-foreground`| `#0a0a0a` | Texto sobre primario    |
+| `--background`      | `#000000` | Fondo principal           |
+| `--foreground`      | `#e8e8e8` | Texto principal           |
+| `--card`            | `#222222` | Superficie de tarjeta     |
+| `--card-foreground` | `#e8e8e8` | Texto sobre card          |
+| `--muted`           | `#222222` | Fondo secundario          |
+| `--muted-foreground`| `#8a8f94` | Texto secundario          |
+| `--border`          | `#333333` | Bordes                    |
+| `--accent`          | `#1dcd9f` | Acento                    |
+| `--ring`            | `#1dcd9f` | Focus ring                |
+| `--primary`         | `#1dcd9f` | Primario (CTA, botones)   |
+| `--primary-foreground`| `#000000`| Texto sobre primario      |
 
-## Paleta — Light Mode (referencia)
+## Paleta — Light Mode
 
-| Token               | Hex       |
-| ------------------- | --------- |
-| `--background`      | `#f2f0ed` |
-| `--foreground`      | `#0c0c0c` |
-| `--card`            | `#ffffff` |
-| `--muted`           | `#e8e5e0` |
-| `--muted-foreground`| `#5c5954` |
-| `--border`          | `#d4d1cb` |
+| Token               | Hex       | Descripción               |
+| ------------------- | --------- | ------------------------- |
+| `--background`      | `#f5f5f5` | Fondo principal           |
+| `--foreground`      | `#000000` | Texto principal           |
+| `--card`            | `#ffffff` | Superficie de tarjeta     |
+| `--card-foreground` | `#000000` | Texto sobre card          |
+| `--muted`           | `#e5e5e5` | Fondo secundario          |
+| `--muted-foreground`| `#555555` | Texto secundario          |
+| `--border`          | `#d4d4d4` | Bordes                    |
+| `--accent`          | `#169976` | Acento                    |
+| `--primary`         | `#1dcd9f` | Primario                  |
+| `--primary-foreground`| `#000000`| Texto sobre primario      |
 
 ---
 

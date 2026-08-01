@@ -41,7 +41,7 @@ export function Contact() {
 
   return (
     <section id="contact" className="flex min-h-screen flex-col justify-center px-6 py-24 snap-start">
-      <div ref={ref} className={`mx-auto max-w-6xl reveal ${isVisible ? "visible" : ""}`}>
+      <div ref={ref} className={`mx-auto max-w-6xl reveal-scale ${isVisible ? "visible" : ""}`}>
         <h2 className="mb-16 text-center text-3xl font-bold md:text-4xl">
           {t("contact.title")}
           <span className="mx-auto mt-3 block h-1 w-16 rounded-full bg-foreground/20" />
