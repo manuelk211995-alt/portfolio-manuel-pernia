@@ -87,7 +87,7 @@ export function About() {
   const { ref, isVisible } = useReveal()
   return (
     <section id="about" className="relative flex min-h-screen flex-col justify-center overflow-hidden px-6 py-24 bg-muted snap-start">
-      <div ref={ref} className={`mx-auto max-w-6xl relative reveal ${isVisible ? "visible" : ""}`}>
+      <div ref={ref} className={`mx-auto max-w-6xl relative reveal-left ${isVisible ? "visible" : ""}`}>
         <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
           {t("about.title")}
           <span className="mx-auto mt-3 block h-1 w-16 rounded-full bg-foreground/20" />

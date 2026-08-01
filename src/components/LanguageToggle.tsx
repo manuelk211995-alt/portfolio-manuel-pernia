@@ -8,6 +8,8 @@ export function LanguageToggle() {
   const { language, toggleLanguage } = useI18n()
   const [mounted, setMounted] = useState(false)
 
+  // Hydration guard: mounted must be set once after mount to avoid SSR mismatch.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setMounted(true) }, [])
 
   return (

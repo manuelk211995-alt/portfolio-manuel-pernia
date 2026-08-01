@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Providers } from "@/components/providers"
 import { Header } from "@/components/Header"
+
 import "./globals.css"
 
 const geistSans = Geist({
@@ -29,20 +30,12 @@ export const metadata: Metadata = {
     siteName: "Manuel Pernia",
     type: "website",
     locale: "en_US",
-    images: [
-      { url: "/og-image.png", width: 1200, height: 630, alt: "Manuel Pernia" },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Manuel Pernia | Full Stack Developer",
     description:
       "Full Stack Developer building modern web applications with React, Node.js, Python and more.",
-    images: ["/og-image.png"],
-  },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-icon.png",
   },
 }
 
