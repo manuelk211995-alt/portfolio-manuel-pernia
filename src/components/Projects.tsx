@@ -11,7 +11,7 @@ const projects = [
     descKey: "projects.economos.desc",
     tags: ["React", "Flask", "Python", "PostgreSQL", "Gemini AI"],
     codeUrl: "https://github.com/manuelk211995-alt/Proyecto-Final-4Geeks",
-    image: "/davinci-image.png",
+    image: "/economos-v2.png",
     demoUrl: "/economos-promo_2026-07-30_01-28-00_mp3audio.mp4",
   },
   {
@@ -19,7 +19,7 @@ const projects = [
     descKey: "projects.calcuvolt.desc",
     tags: ["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Docker"],
     codeUrl: "https://github.com/manuelk211995-alt/CalcuVolt",
-    image: "/calcuvolt.png",
+    image: "/calcuvolt-v2.png",
     demoUrl: "/calculovolt-promo_2026-07-30_00-28-57.mp4",
   },
   {

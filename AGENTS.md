@@ -16,3 +16,9 @@ No usar para: refactorización, escribir scripts desde cero, depurar lógica de 
 3. `query-docs` con el ID de librería seleccionado y la pregunta completa del usuario (no palabras sueltas)
 4. Responde usando la documentación obtenida
 <!-- context7 -->
+
+<!-- project-log -->
+# Proyecto: historial en `document.md`
+
+Este proyecto mantiene un log vivo en `document.md` (raíz). **Antes de trabajar, léelo** para conocer errores previos, causas y soluciones. **Después de cada evento** (bug, error, actualización, cambio, decisión), **actualízalo** agregando una sección con síntoma → causa → solución. No borres entradas anteriores.
+<!-- project-log -->
