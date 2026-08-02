@@ -37,6 +37,8 @@ import {
   SiDockerHex,
   SiPostmanHex,
 } from "@icons-pack/react-simple-icons"
+import { useI18n } from "./LanguageProvider"
+import { useReveal } from "@/lib/useReveal"
 
 const skills = [
   {
@@ -79,51 +81,57 @@ const skills = [
   },
 ]
 
-import { useI18n } from "./LanguageProvider"
-import { useReveal } from "@/lib/useReveal"
-
 export function About() {
   const { t } = useI18n()
   const { ref, isVisible } = useReveal()
   return (
     <section id="about" className="relative flex min-h-screen flex-col justify-center overflow-hidden px-6 py-24 bg-muted snap-start">
-      <div ref={ref} className={`mx-auto max-w-6xl relative reveal-left ${isVisible ? "visible" : ""}`}>
+      <div className="pointer-events-none absolute -top-1/2 -right-1/3 size-[600px] rounded-full bg-[radial-gradient(circle,rgba(0,0,0,0.03)_0%,transparent_70%)]" />
+      <div ref={ref} className={`relative mx-auto max-w-6xl reveal-left ${isVisible ? "visible" : ""}`}>
         <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
           {t("about.title")}
           <span className="mx-auto mt-3 block h-1 w-16 rounded-full bg-foreground/20" />
         </h2>
-        <p className="mx-auto mb-16 max-w-3xl text-center text-base leading-relaxed text-muted-foreground md:text-lg">
-          {t("about.p1")} {t("about.p2")}
-        </p>
-        <div id="skills">
-          <h3 className="mb-8 text-center text-lg font-bold md:text-xl">
-            {t("skills.title")}
-            <span className="mx-auto mt-3 block h-1 w-16 rounded-full bg-foreground/20" />
-          </h3>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+          <div className="text-left">
+            <p className="mb-4 text-base leading-relaxed text-muted-foreground md:text-lg">
+              {t("about.p1")}
+            </p>
+            <p className="mb-10 text-base leading-relaxed text-muted-foreground md:text-lg">
+              {t("about.p2")}
+            </p>
+          </div>
+          <div id="skills">
+            <h3 className="mb-6 text-center text-lg font-bold md:text-xl">
+              {t("skills.title")}
+              <span className="mx-auto mt-3 block h-1 w-16 rounded-full bg-foreground/20" />
+            </h3>
+            <div className="grid auto-rows-fr gap-5 sm:grid-cols-2">
             {skills.map((skill) => (
               <div
                 key={skill.nameKey}
-                className="rounded-xl border border-border bg-card p-8 text-center shadow-sm transition-all hover:-translate-y-2 hover:border-foreground/20 hover:shadow-md hover:shadow-foreground/10"
-
+                className="flex flex-col justify-center rounded-xl border border-border bg-card p-5 text-center shadow-sm transition-all hover:-translate-y-2 hover:border-foreground/20 hover:shadow-md hover:shadow-foreground/10"
               >
-                <h4 className="mb-5 text-lg font-semibold">{t(skill.nameKey)}</h4>
-                <div className="flex flex-wrap items-center justify-center gap-4">
+                <h4 className="mb-4 text-base font-semibold">{t(skill.nameKey)}</h4>
+                <div className="flex flex-wrap items-center justify-center gap-3">
                   {skill.techs.map((tech) => (
-                    <span
-                      key={tech.label}
-                      title={tech.label}
-                      className="flex size-12 items-center justify-center rounded-xl shadow-sm transition-transform duration-300 hover:scale-110 hover:shadow-md"
-                      style={{ backgroundColor: tech.color }}
-                    >
-                      <tech.Icon className="size-7" style={{ color: "#ffffff" }} />
-                    </span>
+                    <div key={tech.label} className="flex flex-col items-center gap-1">
+                      <span
+                        title={tech.label}
+                        className="flex size-10 items-center justify-center rounded-lg shadow-sm transition-transform duration-300 hover:scale-110 hover:shadow-md"
+                        style={{ backgroundColor: tech.color }}
+                      >
+                        <tech.Icon className="size-5" style={{ color: "#ffffff" }} />
+                      </span>
+                      <span className="text-[11px] text-muted-foreground">{tech.label}</span>
+                    </div>
                   ))}
                 </div>
               </div>
             ))}
           </div>
         </div>
+      </div>
       </div>
     </section>
   )
