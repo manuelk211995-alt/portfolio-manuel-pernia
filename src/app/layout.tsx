@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Providers } from "@/components/providers"
 import { Header } from "@/components/Header"
+import { Footer } from "@/components/Footer"
+import { CookieBanner } from "@/components/CookieBanner"
 
 import "./globals.css"
 
@@ -60,6 +62,8 @@ export default function RootLayout({
         <Providers>
           <Header />
           <main id="main-content">{children}</main>
+          <Footer />
+          <CookieBanner />
         </Providers>
         <script
           type="application/ld+json"

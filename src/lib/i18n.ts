@@ -40,7 +40,16 @@ export const translations: Record<Lang, Record<string, string>> = {
     "contact.error": "Error — try again",
     "contact.send": "Send Message",
 
+    "contact.consent": "I accept the Privacy Policy and the processing of my personal data.",
+    "contact.consentLink": "Privacy Policy",
+    "contact.mustAccept": "You must accept the Privacy Policy to send your message.",
     "footer.rights": "All rights reserved.",
+    "footer.privacy": "Privacy Policy",
+    "footer.cookies": "Cookies",
+    "cookies.banner.text": "This site may use cookies to improve your experience. Accept or reject their use. See our Cookie Policy.",
+    "cookies.banner.accept": "Accept",
+    "cookies.banner.reject": "Reject",
+    "cookies.banner.policy": "Cookie Policy",
   },
   es: {
     "nav.home": "Inicio",
@@ -80,7 +89,16 @@ export const translations: Record<Lang, Record<string, string>> = {
     "contact.sent": "Mensaje enviado",
     "contact.error": "Error — inténtalo de nuevo",
     "contact.send": "Enviar Mensaje",
+    "contact.consent": "Acepto la Política de Privacidad y el tratamiento de mis datos personales.",
+    "contact.consentLink": "Política de Privacidad",
+    "contact.mustAccept": "Debes aceptar la Política de Privacidad para enviar el mensaje.",
 
     "footer.rights": "Todos los derechos reservados.",
+    "footer.privacy": "Política de Privacidad",
+    "footer.cookies": "Política de Cookies",
+    "cookies.banner.text": "Este sitio puede utilizar cookies para mejorar la experiencia. Acepta o rechaza su uso. Consulta nuestra Política de Cookies.",
+    "cookies.banner.accept": "Aceptar",
+    "cookies.banner.reject": "Rechazar",
+    "cookies.banner.policy": "Política de Cookies",
   },
 }

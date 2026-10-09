@@ -1,17 +1,34 @@
 "use client"
 
-import { useState, FormEvent } from "react"
+import Link from "next/link"
+import { useState, FormEvent, ChangeEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { useI18n } from "./LanguageProvider"
 import { useReveal } from "@/lib/useReveal"
 
 export function Contact() {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error" | "mustAccept"
+  >("idle")
+  const [consent, setConsent] = useState(false)
   const { t } = useI18n()
   const { ref, isVisible } = useReveal()
 
+  function handleConsentChange(e: ChangeEvent<HTMLInputElement>) {
+    setConsent(e.target.checked)
+    if (status === "mustAccept") {
+      setStatus("idle")
+    }
+  }
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+
+    if (!consent) {
+      setStatus("mustAccept")
+      return
+    }
+
     setStatus("loading")
 
     const form = e.currentTarget
@@ -19,6 +36,7 @@ export function Contact() {
       name: (form.elements.namedItem("name") as HTMLInputElement).value,
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
       message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+      consent: true,
     }
 
     try {
@@ -32,6 +50,7 @@ export function Contact() {
 
       setStatus("success")
       form.reset()
+      setConsent(false)
       setTimeout(() => setStatus("idle"), 4000)
     } catch {
       setStatus("error")
@@ -93,13 +112,44 @@ export function Contact() {
               required
               className="w-full rounded-lg border border-input bg-card px-4 py-3.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-foreground/50 focus:ring-3 focus:ring-foreground/10"
             />
+            <div className="flex items-start gap-2 text-sm text-muted-foreground">
+              <input
+                id="consent"
+                type="checkbox"
+                name="consent"
+                checked={consent}
+                onChange={handleConsentChange}
+                aria-required="true"
+                className="mt-1 h-4 w-4 rounded border-input"
+              />
+              <label htmlFor="consent" className="leading-5">
+                {t("contact.consent")}{" "}
+                <Link
+                  href="/privacidad"
+                  className="underline underline-offset-4 hover:opacity-80"
+                >
+                  {t("contact.consentLink")}
+                </Link>
+              </label>
+            </div>
+            <div aria-live="polite" className="min-h-[1.25rem] text-sm">
+              {status === "mustAccept" && (
+                <p className="text-destructive">{t("contact.mustAccept")}</p>
+              )}
+              {status === "error" && (
+                <p className="text-destructive">{t("contact.error")}</p>
+              )}
+              {status === "success" && (
+                <p className="text-emerald-500">{t("contact.sent")}</p>
+              )}
+            </div>
             <div aria-live="polite" className="min-h-0">
               <Button
                 type="submit"
                 disabled={status === "loading"}
                 className="w-full bg-primary py-6 text-sm font-semibold text-primary-foreground transition-all hover:shadow-lg hover:shadow-foreground/15 disabled:opacity-60"
               >
-                {status === "loading" ? t("contact.sending") : status === "success" ? t("contact.sent") : status === "error" ? t("contact.error") : t("contact.send")}
+                {status === "loading" ? t("contact.sending") : t("contact.send")}
               </Button>
             </div>
           </form>
