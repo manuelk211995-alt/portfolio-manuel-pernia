@@ -50,3 +50,8 @@ opencode.jsonc
 skills-lock.json
 CLAUDE.md
 dev.log
+
+# impeccable (installed local)
+.claude/
+
+.claude/settings.local.json
