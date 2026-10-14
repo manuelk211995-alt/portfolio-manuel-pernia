@@ -496,6 +496,37 @@ Salidas: **exit 0 = sin hallazgos**, **2 = hay hallazgos**, **1 = no se pudo esc
 
 ---
 
+## 23. SEO "quick wins" sin cambiar URLs (sitemap, robots, manifest, iconos, OG, JSON-LD)
+
+**Petición:** "mejorar el SEO al máximo" tras el commit `d6fffe5`. Se decidió con el usuario un alcance de **victorias rápidas sin tocar URLs** (no se añade routing `/es`). El SEO bilingüe real (rutas por idioma + `hreflang` válido) queda pendiente como fase posterior.
+
+**Limitación conocida (causa raíz):** el i18n es **solo cliente** (`src/components/LanguageProvider.tsx`): el estado arranca en `"en"`, y el español se aplica por JS + `localStorage` cambiando `document.documentElement.lang`. El servidor **solo renderiza inglés** y **no existe una URL `/es`**, así que Google solo puede indexar la versión inglesa y **no es posible emitir `hreflang` válido** (no hay URLs alternas). Se mitiga con `og:locale = en_US` + `og:locale:alternate = es_ES` y `canonical` a la raíz. Para SEO bilingüe de verdad habría que mover el idioma a segmento de ruta (`/`, `/es`) con metadata por locale.
+
+**Archivos nuevos:**
+- `src/lib/site.ts` — config central: `siteUrl`, `siteName`, `siteTitle`, `siteDescription`, `siteLocale`/`siteLocaleAlt`, `keywords`, `social`, `knowsAbout`. Reutilizada por layout, sitemap, robots, manifest y OG.
+- `src/app/sitemap.ts` — `/`, `/privacidad`, `/cookies` con `changeFrequency` y `priority`.
+- `src/app/robots.ts` — `allow: /`, `sitemap` y `host`.
+- `src/app/manifest.ts` — PWA manifest (petróleo `#17313c`, `lang: en`, iconos).
+- `src/app/icon.svg` — favicon (monograma "MP", barra naranja).
+- `src/app/apple-icon.tsx` — apple-touch-icon 180×180 (ImageResponse).
+- `src/lib/og-image.tsx` + `src/app/opengraph-image.tsx` + `src/app/twitter-image.tsx` — imagen OG 1200×630 generada con `next/og` (fondo petróleo, banda overprint, nombre + rol). `twitter-image` reutiliza el mismo render.
+
+**`layout.tsx` ampliado:** `title` con `template` (`%s | Manuel Pernia`) + `default`, `applicationName`, `authors`/`creator`/`publisher`, `category`, `keywords`, `referrer`, `formatDetection`, `alternates.canonical`, `openGraph` (type/locale/alternateLocale/url/siteName/title/description), `twitter` (`summary_large_image`), `robots` + `googleBot` (`max-image-preview: large`). Nuevo `export const viewport` con `themeColor` claro/oscuro y `colorScheme`. **JSON-LD** reemplazado por un `@graph`: `WebSite` + `ProfilePage` + `Person` (con `image`, `jobTitle`, `knowsAbout`, `sameAs`), serializado con `JSON.stringify(...).replace(/</g, "\\u003c")`.
+
+**Páginas legales:** se quitó el `| Manuel Pernia` del `title` (ahora lo añade el template, evitando doble sufijo) y se añadió `alternates.canonical`. **Bug corregido además:** ambas páginas envolvían el contenido en `<main id="main-content">` **dentro** del `<main id="main-content">` del layout → `main` anidado + `id` duplicado (inválido y malo para a11y/SEO). Se cambió el envoltorio interno a `<div>`.
+
+**No se pudo hacer:** `hreflang`/`alternates.languages` (no hay URLs por idioma), asset `favicon.ico` propio (Next generó uno automáticamente desde `icon.svg`), ni `verification` de Search Console (falta el token del usuario).
+
+**Verificación:**
+- `npm run lint` ✅ (0/0) · `npx tsc --noEmit` ✅.
+- `npm run build` ✅ (14 rutas; `sitemap.xml`, `robots.txt`, `manifest.webmanifest`, `icon.svg`, `apple-icon`, `opengraph-image`, `twitter-image` prerenderizadas estáticas).
+- Dev (3000): `/robots.txt`, `/sitemap.xml`, `/manifest.webmanifest`, `/icon.svg`, `/apple-icon`, `/opengraph-image` → **200**.
+- `<head>` renderizado incluye: `canonical`, `og:*` (title/desc/url/site_name/locale/alternate/image 1200×630/alt), `twitter:card = summary_large_image` + image, `link rel=manifest`, `theme-color` light/dark, e `icon.svg` + `apple-touch-icon` + `favicon.ico` automático.
+- JSON-LD válido con `@graph` (WebSite/ProfilePage/Person) e `id`s absolutos a `https://manuelpernia.dev`.
+- **Producción (`next start -p 3001`):** `og:image`/`twitter:image` resuelven a `https://manuelpernia.dev/...`; `/opengraph-image` → `200 image/png` (42 KB). En **dev** el `og:image` sale con origen `localhost:3000` (comportamiento normal de dev; en build usa `metadataBase`).
+
+---
+
 ## Comandos útiles
 
 ```powershell

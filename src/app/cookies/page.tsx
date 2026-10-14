@@ -1,14 +1,16 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Política de Cookies | Manuel Pernia",
-  description:
-    "Política de Cookies del portfolio de Manuel Pernia.",
+  title: "Política de Cookies",
+  description: "Política de Cookies del portfolio de Manuel Pernia.",
+  alternates: {
+    canonical: "/cookies",
+  },
 }
 
 export default function CookiesPage() {
   return (
-    <main id="main-content" className="min-h-screen px-6 py-24">
+    <div className="min-h-screen px-6 py-24">
       <div className="mx-auto max-w-4xl">
         <h1 className="mb-8 text-3xl font-bold md:text-4xl">
           Política de Cookies
@@ -132,6 +134,6 @@ export default function CookiesPage() {
           <p>Última actualización: 9 de octubre de 2026</p>
         </section>
       </div>
-    </main>
+    </div>
   )
 }

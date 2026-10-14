@@ -1,14 +1,17 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad | Manuel Pernia",
+  title: "Política de Privacidad",
   description:
     "Política de Privacidad y Tratamiento de Datos Personales del portfolio de Manuel Pernia.",
+  alternates: {
+    canonical: "/privacidad",
+  },
 }
 
 export default function PrivacidadPage() {
   return (
-    <main id="main-content" className="min-h-screen px-6 py-24">
+    <div className="min-h-screen px-6 py-24">
       <div className="mx-auto max-w-4xl">
         <h1 className="mb-8 text-3xl font-bold md:text-4xl">
           Política de Privacidad
@@ -145,6 +148,6 @@ export default function PrivacidadPage() {
           <p>Última actualización: 9 de octubre de 2026</p>
         </section>
       </div>
-    </main>
+    </div>
   )
 }

@@ -1,9 +1,20 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono, Instrument_Serif, Instrument_Sans } from "next/font/google"
 import { Providers } from "@/components/providers"
 import { Header } from "@/components/Header"
 import { Footer } from "@/components/Footer"
 import { CookieBanner } from "@/components/CookieBanner"
+import {
+  siteUrl,
+  siteName,
+  siteTitle,
+  siteDescription,
+  siteLocale,
+  siteLocaleAlt,
+  keywords,
+  social,
+  knowsAbout,
+} from "@/lib/site"
 
 import "./globals.css"
 
@@ -33,28 +44,95 @@ const instrumentSans = Instrument_Sans({
   display: "swap",
 })
 
-const siteUrl = "https://manuelpernia.dev"
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Manuel Pernia | Full Stack Developer",
-  description:
-    "Full Stack Developer building modern web applications with React, Node.js, Python and more. Portfolio showcasing projects and skills.",
+  title: {
+    default: siteTitle,
+    template: `%s | ${siteName}`,
+  },
+  description: siteDescription,
+  applicationName: siteName,
+  authors: [{ name: siteName, url: siteUrl }],
+  creator: siteName,
+  publisher: siteName,
+  category: "technology",
+  keywords,
+  referrer: "origin-when-cross-origin",
+  alternates: {
+    canonical: "/",
+  },
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: "Manuel Pernia | Full Stack Developer",
-    description:
-      "Full Stack Developer building modern web applications with React, Node.js, Python and more.",
-    url: siteUrl,
-    siteName: "Manuel Pernia",
     type: "website",
-    locale: "en_US",
+    locale: siteLocale,
+    alternateLocale: siteLocaleAlt,
+    url: siteUrl,
+    siteName,
+    title: siteTitle,
+    description: siteDescription,
   },
   twitter: {
-    card: "summary",
-    title: "Manuel Pernia | Full Stack Developer",
-    description:
-      "Full Stack Developer building modern web applications with React, Node.js, Python and more.",
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+}
+
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f1e8" },
+    { media: "(prefers-color-scheme: dark)", color: "#17313c" },
+  ],
+}
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: siteName,
+      description: siteDescription,
+      inLanguage: "en",
+      publisher: { "@id": `${siteUrl}/#person` },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${siteUrl}/#profilepage`,
+      url: siteUrl,
+      name: siteTitle,
+      isPartOf: { "@id": `${siteUrl}/#website` },
+      about: { "@id": `${siteUrl}/#person` },
+      inLanguage: "en",
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#person`,
+      name: siteName,
+      url: siteUrl,
+      image: `${siteUrl}/profile.jpeg`,
+      jobTitle: "Full Stack Developer",
+      knowsAbout,
+      sameAs: [social.github, social.linkedin],
+    },
+  ],
 }
 
 export default function RootLayout({
@@ -84,17 +162,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Manuel Pernia",
-              url: siteUrl,
-              jobTitle: "Full Stack Developer",
-              sameAs: [
-                "https://github.com/manuelk211995-alt",
-                "https://www.linkedin.com/in/manuelpernia/",
-              ],
-            }),
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
           }}
         />
       </body>
