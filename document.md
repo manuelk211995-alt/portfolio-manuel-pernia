@@ -153,6 +153,47 @@ Rename-Item -LiteralPath "public/calcuvolt-nuevo.png.png" -NewName "calcuvolt-v2
 
 ---
 
+## 14. Proyecto nuevo "VolleyPlan" (Plan Game Voleibol) sin código enlazado
+
+**Tipo:** nueva funcionalidad.
+
+**Petición:** añadir el proyecto "Plan Game Voleibol" al apartado Proyectos, pero sin botón de código, ya que será publicado por el usuario (no es código abierto).
+
+**Investigación:** el repo privado `manuelk211995-alt/volley-game-plan` (se clonó a temp para analizarlo; su README era la plantilla Vite por defecto). El nombre real del producto es **VolleyPlan** (extraído de `PRODUCT.md`): herramienta web para entrenadores de voleibol que condensa el plan de juego en una hoja A4 imprimible con pizarra táctica (Konva), notas de rival/equipo y exportación a PDF. Stack: React 19 + Vite + Tailwind v3.4 + Express/SQLite/JWT.
+
+**Cambios:**
+- `src/components/Projects.tsx`: nuevo objeto en el array `projects` con solo `title`, `descKey` y `tags` (sin `codeUrl`, sin `demoUrl`, sin `image`). El componente ya soporta campos opcionales: sin `image` muestra el placeholder SVG con el nombre, y los botones Código/Demo no se renderizan.
+- `src/lib/i18n.ts`: claves `projects.volleyplan.desc` en EN y ES.
+
+**Verificación:** `npm run lint` OK, `npx tsc --noEmit` OK, dev server responde 200 y "VolleyPlan" visible en el HTML.
+
+**Pendiente:** cuando el usuario publique la app, añadir opcionalmente `image` (captura en `public/`, sin espacios ni `/public/` en la ruta) y un enlace externo (habría que ampliar el botón Demo para soportar URL externa además de vídeo local).
+
+---
+
+## 15. Galería de 2 imágenes en la tarjeta de VolleyPlan
+
+**Tipo:** mejora de UI / recursos.
+
+**Petición:** usar las 2 capturas `game-plan-voleibol` (landing + editor) en la tarjeta del proyecto.
+
+**Síntoma/riesgo inicial:** el archivo venía como `game-plan-voleibol.png.png` (**doble extensión**, ver incidente 6). Se renombraron a nombres limpios:
+```powershell
+Rename-Item -LiteralPath "public/game-plan-voleibol.png.png" -NewName "game-plan-voleibol-1.png"
+Rename-Item -LiteralPath "public/game-plan-voleibol1.png"      -NewName "game-plan-voleibol-2.png"
+```
+
+**Cambio en el código (`src/components/Projects.tsx`):**
+- El campo `image` (una sola) sigue existiendo para los demás proyectos. Se añadió un campo opcional `images: string[]` (VolleyPlan usa las 2 nuevas rutas).
+- Nuevo sub-componente `ProjectGallery({ images, alt })`: imágenes apiladas con fundido (`opacity`, 700ms) que rotan cada **3.5 s**, más puntos indicadores clicables (`.size-2 rounded-full`).
+- El render de la card pasa a: `{(project.images ?? (project.image ? [project.image] : [])).length > 0 ? <ProjectGallery .../> : <placeholder/>}`. Así los proyectos con una sola imagen siguen funcionando igual.
+
+**Regla para imágenes múltiples:** usar `images: [...]` con rutas limpias (sin espacios, sin `/public/`, sin doble extensión). Next.js normaliza el campo a opcional en arrays con formas distintas, así que `project.images`/`project.image` compilan sin problemas.
+
+**Verificación:** `npm run lint` OK, `npx tsc --noEmit` OK, HTTP 200 y ambas rutas de imagen devuelven 200.
+
+---
+
 ## 2. La imagen que se muestra no es la correcta (capturas borradas en git)
 
 **Síntoma:** La imagen del proyecto no corresponde a la real (ej. se mostró una imagen generada en vez de la captura del panel).

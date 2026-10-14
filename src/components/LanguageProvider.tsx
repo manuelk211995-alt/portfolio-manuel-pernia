@@ -5,7 +5,6 @@ import { translations, type Lang } from "@/lib/i18n"
 
 type LanguageContextValue = {
   language: Lang
-  setLanguage: (lang: Lang) => void
   toggleLanguage: () => void
   t: (key: string) => string
 }
@@ -28,12 +27,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("lang", language)
   }, [language])
 
-  const setLanguage = (lang: Lang) => setLanguageState(lang)
   const toggleLanguage = () => setLanguageState((prev) => (prev === "en" ? "es" : "en"))
   const t = (key: string) => translations[language][key] ?? key
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t }}>
+    <LanguageContext.Provider value={{ language, toggleLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   )
