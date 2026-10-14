@@ -1,12 +1,35 @@
-import { Metadata } from "next"
+import type { Metadata } from "next"
+import { defaultLocale, hasLocale, localePath, type Locale } from "@/lib/site"
 
-export const metadata: Metadata = {
-  title: "Política de Privacidad",
-  description:
-    "Política de Privacidad y Tratamiento de Datos Personales del portfolio de Manuel Pernia.",
-  alternates: {
-    canonical: "/privacidad",
-  },
+const titleByLocale: Record<Locale, string> = {
+  en: "Privacy Policy",
+  es: "Política de Privacidad",
+}
+
+const descriptionByLocale: Record<Locale, string> = {
+  en: "Privacy Policy and Personal Data Processing of Manuel Pernia's portfolio.",
+  es: "Política de Privacidad y Tratamiento de Datos Personales del portfolio de Manuel Pernia.",
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const locale: Locale = hasLocale(lang) ? lang : defaultLocale
+  return {
+    title: titleByLocale[locale],
+    description: descriptionByLocale[locale],
+    alternates: {
+      canonical: localePath(locale, "/privacidad"),
+      languages: {
+        en: localePath("en", "/privacidad"),
+        es: localePath("es", "/privacidad"),
+        "x-default": localePath("en", "/privacidad"),
+      },
+    },
+  }
 }
 
 export default function PrivacidadPage() {

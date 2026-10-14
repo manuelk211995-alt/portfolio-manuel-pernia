@@ -3,13 +3,14 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useI18n } from "./LanguageProvider"
+import { localePath } from "@/lib/site"
 
 type ConsentState = "accepted" | "rejected" | null
 
 const STORAGE_KEY = "cookieConsent"
 
 export function CookieBanner() {
-  const { t } = useI18n()
+  const { t, language } = useI18n()
   const [consent, setConsent] = useState<ConsentState>(null)
   const [mounted, setMounted] = useState(false)
 
@@ -61,7 +62,7 @@ export function CookieBanner() {
         </p>
         <div className="flex flex-wrap items-center gap-2">
           <Link
-            href="/cookies"
+            href={localePath(language, "/cookies")}
             className="rounded-[2px] px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             {t("cookies.banner.policy")}

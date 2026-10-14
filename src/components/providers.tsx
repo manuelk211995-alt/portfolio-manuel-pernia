@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from "next-themes"
 import { LanguageProvider } from "./LanguageProvider"
+import type { Lang } from "@/lib/i18n"
 
 if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
   const originalError = console.error
@@ -16,10 +17,16 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
   }
 }
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+  lang,
+}: {
+  children: React.ReactNode
+  lang: Lang
+}) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-      <LanguageProvider>{children}</LanguageProvider>
+      <LanguageProvider lang={lang}>{children}</LanguageProvider>
     </ThemeProvider>
   )
 }

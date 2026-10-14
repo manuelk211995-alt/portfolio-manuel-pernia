@@ -1,9 +1,10 @@
 "use client"
 
 import { useI18n } from "./LanguageProvider"
+import { localePath } from "@/lib/site"
 
 export function Footer() {
-  const { t } = useI18n()
+  const { t, language } = useI18n()
   const year = new Date().getFullYear()
 
   return (
@@ -18,7 +19,7 @@ export function Footer() {
             <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
               <li>
                 <a
-                  href="/privacidad"
+                  href={localePath(language, "/privacidad")}
                   className="transition-colors hover:text-foreground"
                 >
                   {t("footer.privacy")}
@@ -26,7 +27,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="/cookies"
+                  href={localePath(language, "/cookies")}
                   className="transition-colors hover:text-foreground"
                 >
                   {t("footer.cookies")}

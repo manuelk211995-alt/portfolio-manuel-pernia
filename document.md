@@ -527,6 +527,43 @@ Salidas: **exit 0 = sin hallazgos**, **2 = hay hallazgos**, **1 = no se pudo esc
 
 ---
 
+## 24. i18n real con rutas por idioma (`/` = EN, `/es` = ES) + `hreflang` y OG por locale
+
+**Petición:** tras §23, el usuario preguntó si valía la pena mantener el botón de idioma. Se explicó que el i18n de cliente (sin URL `/es`) impedía `hreflang` válido y la indexación del español. El usuario eligió **i18n por rutas** ("hagámoslo bien, mantenemos bilingüe") → locale por defecto EN sin prefijo en `/`, español en `/es` (asimétrico). El botón de idioma **no se elimina**: pasa a ser un enlace de navegación.
+
+**Configuración de locales:**
+- `src/lib/site.ts` reescrito: `locales = ["en","es"]`, `defaultLocale = "en"`, `hasLocale()`, `localeMeta` (title/description/ogLocale por locale), `localePath(lang, path)`, `absoluteUrl(path)`, y constantes OG (`ogSize`, `ogContentType`, `ogAlt`, `ogImageUrl(lang)`). Se eliminaron `siteTitle`/`siteLocale`/`siteLocaleAlt` (el manifest solo usa `siteDescription`).
+- `src/lib/i18n.ts`: `export type Lang = Locale` (los textos `translations` EN/ES no cambian).
+
+**Routing (clave):** en Next 16 **`middleware.ts` fue renombrado a `proxy.ts`** (misma función). `src/proxy.ts` (nuevo): reescribe `/` → `/en`, deja pasar `/es*` y **redirige `/en*` → sin prefijo** (308). El `matcher` excluye `api`, `_next`, `icon`, `apple-icon`, `opengraph-image`, `twitter-image` y cualquier ruta con punto.
+
+**Rutas movidas a `src/app/[lang]/`:** `layout.tsx`, `page.tsx`, `privacidad/page.tsx`, `cookies/page.tsx`. El layout expone `generateStaticParams` + `dynamicParams = false` (solo `/en` y `/es`). Las rutas de metadata (`sitemap.ts`, `robots.ts`, `manifest.ts`, `icon.svg`, `apple-icon.tsx`, `api/*`) se quedan en la raíz `app/` (agnósticas de idioma). Añadido `src/app/[lang]/not-found.tsx` bilingüe.
+
+**Metadata y estructura:**
+- `[lang]/layout.tsx`: `generateMetadata` por locale (`title`/`description`, `alternates.canonical` + `alternates.languages` con `x-default`, OG `locale`/`alternateLocale`/`images`, twitter `images`); `<html lang={lang}>`; skip-link localizado; JSON-LD con `inLanguage` y `jobTitle` por locale.
+- Páginas legales: `metadata` → `generateMetadata` localizado (canonical `/privacidad` vs `/es/privacidad`).
+- `LanguageProvider` ahora recibe `lang` por prop (**server-driven**); ya **no** usa estado/localStorage/efecto ni toca `document.documentElement.lang`. `LanguageToggle` es un `<Link>` que navega entre `/` y `/es` (estilado con `buttonVariants`). Los enlaces legales (Footer/Contact/CookieBanner) usan `localePath(language, ...)`.
+- `src/app/sitemap.ts`: emite **ambas** locales con `xhtml:link` alternates.
+
+**Incidente con la imagen OG (síntoma → causa → solución):**
+- **Síntoma:** tras mover el layout a `[lang]`, `<head>` dejó de incluir `og:image`/`twitter:image`.
+- **Causa:** un `opengraph-image`/`twitter-image` de la raíz `app/` **no cascadea** al segmento hijo `[lang]` cuando no existe `app/layout.tsx` raíz (el segmento raíz no tiene layout que lo ancle).
+- **Primer intento (falló a medias):** mover las imágenes a `[lang]/` con `params` servía `/es/opengraph-image` (200) pero **EN daba 404**: la URL `/en/opengraph-image` es redirigida por el proxy a `/opengraph-image`, que está **excluido del matcher** → sin ruta.
+- **Solución final:** endpoint único `src/app/api/og/route.tsx` (`GET` lee `?lang=`) que devuelve `renderOgImage(lang)` (PNG 1200×630, subtítulo EN/ES, `cache-control: immutable`). Se referencia explícito en `generateMetadata` con `ogImageUrl(lang)` → `/api/og?lang=..`. Como `/api/*` está excluido del proxy, funciona igual en ambos idiomas. `src/lib/og-image.tsx` ahora consume `ogSize` de `site.ts` y acepta `lang`.
+
+**Verificación:**
+- `npm run lint` ✅, `npx tsc --noEmit` ✅, `npm run build` ✅ (`/en`, `/es`, `/en|es/privacidad`, `/en|es/cookies`, `/api/og`; sin warning de `metadataBase`).
+- Producción (`next start -p 3001`): `/` → **200** (`lang="en"`, SSR inglés), `/es` → **200** (`lang="es"`, SSR español: "Sobre Mí"/"Desarrollador Full Stack"), `/en` → **307** → `/`, `/privacidad` → 200, `/es/privacidad` → 200.
+- `<head>`: canonical `/` (EN) y `/es` (ES); `alternate hreflang en/es/x-default`; `og:locale` `en_US`/`es_ES` + alternate; `og:image`/`twitter:image` = `https://manuelpernia.dev/api/og?lang=en|es`.
+- `/api/og?lang=en` y `?lang=es` → **200 image/png** con **md5 distinto** (imagen localizada).
+- `sitemap.xml` con ambas locales y `xhtml:link` alternates.
+
+**Compromisos conocidos:**
+- El **cuerpo** de las páginas legales sigue en español para ambos idiomas; solo se localiza su metadata.
+- `metadataBase` = `https://manuelpernia.dev`: en local los `og:image` apuntan al dominio de producción (comportamiento normal).
+
+---
+
 ## Comandos útiles
 
 ```powershell

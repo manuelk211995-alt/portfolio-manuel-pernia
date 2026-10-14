@@ -1,11 +1,35 @@
-import { Metadata } from "next"
+import type { Metadata } from "next"
+import { defaultLocale, hasLocale, localePath, type Locale } from "@/lib/site"
 
-export const metadata: Metadata = {
-  title: "Política de Cookies",
-  description: "Política de Cookies del portfolio de Manuel Pernia.",
-  alternates: {
-    canonical: "/cookies",
-  },
+const titleByLocale: Record<Locale, string> = {
+  en: "Cookie Policy",
+  es: "Política de Cookies",
+}
+
+const descriptionByLocale: Record<Locale, string> = {
+  en: "Cookie Policy of Manuel Pernia's portfolio.",
+  es: "Política de Cookies del portfolio de Manuel Pernia.",
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const locale: Locale = hasLocale(lang) ? lang : defaultLocale
+  return {
+    title: titleByLocale[locale],
+    description: descriptionByLocale[locale],
+    alternates: {
+      canonical: localePath(locale, "/cookies"),
+      languages: {
+        en: localePath("en", "/cookies"),
+        es: localePath("es", "/cookies"),
+        "x-default": localePath("en", "/cookies"),
+      },
+    },
+  }
 }
 
 export default function CookiesPage() {

@@ -1,26 +1,31 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useI18n } from "./LanguageProvider"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 export function LanguageToggle() {
-  const { language, toggleLanguage } = useI18n()
-  const [mounted, setMounted] = useState(false)
+  const { language } = useI18n()
+  const pathname = usePathname()
+  const isEs = language === "es"
 
-  // Hydration guard: mounted must be set once after mount to avoid SSR mismatch.
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { setMounted(true) }, [])
+  const target = isEs
+    ? pathname.replace(/^\/es(?=\/|$)/, "") || "/"
+    : `/es${pathname === "/" ? "" : pathname}`
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={toggleLanguage}
-      aria-label={language === "en" ? "Switch to Spanish" : "Switch to English"}
-      className="text-xs font-semibold"
+    <Link
+      href={target}
+      hrefLang={isEs ? "en" : "es"}
+      aria-label={isEs ? "Switch to English" : "Cambiar a español"}
+      className={cn(
+        buttonVariants({ variant: "ghost", size: "icon" }),
+        "text-xs font-semibold"
+      )}
     >
-      {mounted ? (language === "es" ? "EN" : "ES") : "EN"}
-    </Button>
+      {isEs ? "EN" : "ES"}
+    </Link>
   )
 }

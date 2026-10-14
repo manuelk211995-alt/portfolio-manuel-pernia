@@ -1,9 +1,10 @@
 import { ImageResponse } from "next/og"
-import { siteName } from "./site"
+import { siteName, ogSize, type Locale } from "./site"
 
-export const ogSize = { width: 1200, height: 630 }
-export const ogContentType = "image/png"
-export const ogAlt = `${siteName} — Full Stack Developer`
+const subtitles: Record<Locale, string> = {
+  en: "Full Stack Developer",
+  es: "Desarrollador Full Stack",
+}
 
 const palette = {
   petrol: "#17313C",
@@ -12,7 +13,7 @@ const palette = {
   orange: "#C35929",
 }
 
-export function renderOgImage() {
+export function renderOgImage(lang: Locale = "en") {
   return new ImageResponse(
     (
       <div
@@ -61,7 +62,7 @@ export function renderOgImage() {
               marginTop: 12,
             }}
           >
-            Full Stack Developer
+            {subtitles[lang]}
           </div>
         </div>
         <div
@@ -80,6 +81,6 @@ export function renderOgImage() {
         </div>
       </div>
     ),
-    { ...ogSize }
+    { ...ogSize, headers: { "cache-control": "public, max-age=31536000, immutable" } }
   )
 }

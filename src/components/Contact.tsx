@@ -5,6 +5,7 @@ import { useState, FormEvent, ChangeEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { useI18n } from "./LanguageProvider"
 import { useReveal } from "@/lib/useReveal"
+import { localePath } from "@/lib/site"
 
 // Inputs editoriales: solo linea inferior. Estados sin color (B/N):
 // el significado lo carga el texto, el peso y la regla, no el tono.
@@ -16,7 +17,7 @@ export function Contact() {
     "idle" | "loading" | "success" | "error" | "mustAccept"
   >("idle")
   const [consent, setConsent] = useState(false)
-  const { t } = useI18n()
+  const { t, language } = useI18n()
   const { ref, isVisible } = useReveal()
 
   function handleConsentChange(e: ChangeEvent<HTMLInputElement>) {
@@ -167,7 +168,7 @@ export function Contact() {
               <label htmlFor="consent" className="leading-5">
                 {t("contact.consent")}{" "}
                 <Link
-                  href="/privacidad"
+                  href={localePath(language, "/privacidad")}
                   className="underline underline-offset-4 hover:opacity-80"
                 >
                   {t("contact.consentLink")}

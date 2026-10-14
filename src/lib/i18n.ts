@@ -1,4 +1,6 @@
-export type Lang = "en" | "es"
+import type { Locale } from "./site"
+
+export type Lang = Locale
 
 export const translations: Record<Lang, Record<string, string>> = {
   en: {
