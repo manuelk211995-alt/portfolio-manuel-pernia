@@ -44,3 +44,9 @@ next-env.d.ts
 # agent skills y proyectos de video (no forman parte del portfolio)
 .agents/
 videos/
+
+# tooling
+opencode.jsonc
+skills-lock.json
+CLAUDE.md
+dev.log

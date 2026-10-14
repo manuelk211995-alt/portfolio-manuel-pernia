@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { useI18n } from "./LanguageProvider"
 import { useReveal } from "@/lib/useReveal"
@@ -30,7 +30,48 @@ const projects = [
     image: "/portfolio-chatgpt.png",
     demoUrl: "/portfolio-promo.mp4",
   },
+  {
+    title: "VolleyPlan",
+    descKey: "projects.volleyplan.desc",
+    tags: ["React", "Vite", "Tailwind CSS", "Express", "SQLite", "Konva"],
+    images: ["/game-plan-voleibol-1.png", "/game-plan-voleibol-2.png"],
+  },
 ]
+
+function ProjectGallery({ images, alt }: { images: string[]; alt: string }) {
+  const [active, setActive] = useState(0)
+  useEffect(() => {
+    if (images.length < 2) return
+    const id = setInterval(() => setActive((i) => (i + 1) % images.length), 3500)
+    return () => clearInterval(id)
+  }, [images.length])
+  return (
+    <div className="relative h-48 overflow-hidden">
+      {images.map((src, i) => (
+        <Image
+          key={src}
+          src={src}
+          alt={`${alt} ${i + 1}`}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className={`object-cover transition-opacity duration-700 ${i === active ? "opacity-100" : "opacity-0"}`}
+        />
+      ))}
+      {images.length > 1 && (
+        <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              aria-label={`${alt} ${i + 1}`}
+              className={`size-2 rounded-full transition-colors ${i === active ? "bg-white" : "bg-white/50 hover:bg-white/80"}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export function Projects() {
   const [demoVideo, setDemoVideo] = useState<string | null>(null)
@@ -49,16 +90,11 @@ export function Projects() {
               key={project.title}
               className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all hover:-translate-y-2 hover:border-foreground/20 hover:shadow-md hover:shadow-foreground/10"
             >
-              {project.image ? (
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
+              {(project.images ?? (project.image ? [project.image] : [])).length > 0 ? (
+                <ProjectGallery
+                  images={project.images ?? [project.image as string]}
+                  alt={project.title}
+                />
               ) : (
                 <div className="flex h-48 items-center justify-center bg-muted">
                   <div className="flex flex-col items-center gap-3 text-muted-foreground">
