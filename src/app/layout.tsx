@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Instrument_Serif, Instrument_Sans } from "next/font/google"
 import { Providers } from "@/components/providers"
 import { Header } from "@/components/Header"
 import { Footer } from "@/components/Footer"
@@ -15,6 +15,22 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+})
+
+const editorialSerif = Instrument_Serif({
+  variable: "--font-editorial",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
+})
+
+const instrumentSans = Instrument_Sans({
+  variable: "--font-sans-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
 })
 
 const siteUrl = "https://manuelpernia.dev"
@@ -50,12 +66,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${editorialSerif.variable} ${instrumentSans.variable}`}
     >
       <body className="min-h-screen bg-background text-foreground antialiased">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-background focus:text-foreground focus:border focus:border-border"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-[2px] focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-foreground"
         >
           Skip to content
         </a>

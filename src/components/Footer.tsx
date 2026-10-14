@@ -7,31 +7,42 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-border bg-background">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 md:flex-row md:items-center md:justify-between">
-        <div className="text-sm text-muted-foreground">
-          © {year} Manuel Pernia. {t("footer.rights")}
+    <footer className="field-petrol border-t border-border">
+      <div className="mx-auto max-w-6xl px-6 py-8">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <p className="font-mono text-xs uppercase tracking-[0.15em] text-muted-foreground">
+            © {year} Manuel Pernia — {t("footer.rights")}
+          </p>
+
+          <nav aria-label="Legal">
+            <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
+              <li>
+                <a
+                  href="/privacidad"
+                  className="transition-colors hover:text-foreground"
+                >
+                  {t("footer.privacy")}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/cookies"
+                  className="transition-colors hover:text-foreground"
+                >
+                  {t("footer.cookies")}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#hero"
+                  className="transition-colors hover:text-foreground"
+                >
+                  ↑ {t("nav.home")}
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
-        <nav aria-label="Legal">
-          <ul className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-            <li>
-              <a
-                href="/privacidad"
-                className="transition-colors hover:text-foreground"
-              >
-                {t("footer.privacy")}
-              </a>
-            </li>
-            <li>
-              <a
-                href="/cookies"
-                className="transition-colors hover:text-foreground"
-              >
-                {t("footer.cookies")}
-              </a>
-            </li>
-          </ul>
-        </nav>
       </div>
     </footer>
   )

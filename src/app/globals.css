@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans-body);
   --font-mono: var(--font-geist-mono);
-
+  --font-display: var(--font-editorial);
 
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -19,54 +19,208 @@
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
+  --color-accent-ink: var(--accent-ink);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
 
+  /* Radios editoriales: 0-2px en todo el sistema */
+  --radius-sm: 0px;
+  --radius-md: 1px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
 }
 
 :root {
-  --background: #f2f0ed;
-  --foreground: #0c0c0c;
-  --card: #ffffff;
-  --card-foreground: #0c0c0c;
+  /* -------------------------------------------------------------------------
+     PALETA "PETROLEO Y OXIDO" - petrol, azul, teal, orxido (rust) + naranja.
+     Estrategia: el color posee regiones enteras (ver .field-* mas abajo).
+     Tema claro = papel (crema) con campos en tintes palidos del mismo tono.
+     El naranja (#C35929) es la tinta de ACCION: botones, firma, seleccion.
+  ------------------------------------------------------------------------- */
+  --pal-paper: #f4f1e8;
+  --pal-ink: #17313c;
+  --pal-ink-strong: #0a0a0a;
+  --pal-petrol: #17313c;
+  --pal-blue: #254e72;
+  --pal-teal: #206e82;
+  --pal-rust: #a45230;
+  --pal-orange: #c35929;
 
-  --muted: #e8e5e0;
-  --muted-foreground: #5c5954;
-  --accent: #0c0c0c;
-  --accent-foreground: #ffffff;
-  --destructive: #dc2626;
-  --border: #d4d1cb;
-  --input: #d4d1cb;
-  --ring: #0c0c0c;
-  --radius: 0.5rem;
+  /* Acento legible como TEXTO (el naranja solo funciona como relleno/borde) */
+  --accent-ink: #8a4326;
+
+  /* Campos de seccion: par fondo/texto (firma en .overprint) */
+  --field-petrol-bg: #d7dee0;
+  --field-petrol-fg: #17313c;
+  --field-blue-bg: #d5e0ea;
+  --field-blue-fg: #17313c;
+  --field-teal-bg: #d3e6e6;
+  --field-teal-fg: #17313c;
+  --field-rust-bg: #f0dfd3;
+  --field-rust-fg: #5f2d18;
+  --field-paper-bg: #fbf9f2;
+  --field-paper-fg: #17313c;
+
+  --background: var(--pal-paper);
+  --foreground: var(--pal-ink);
+
+  --card: #fbf9f2;
+  --card-foreground: var(--pal-ink);
+  --popover: #fbf9f2;
+  --popover-foreground: var(--pal-ink);
+
+  /* La accion se lleva el naranja: siempre localizable en cualquier campo */
+  --primary: var(--pal-orange);
+  --primary-foreground: var(--pal-ink-strong);
+  --secondary: #e7e2d5;
+  --secondary-foreground: var(--pal-ink);
+
+  --muted: #e7e2d5;
+  --muted-foreground: #55606a;
+  --accent: var(--pal-ink);
+  --accent-foreground: var(--pal-paper);
+
+  --destructive: #c23b2a;
+  --border: #d8d2c4;
+  --input: #c7c0b0;
+  --ring: var(--pal-orange);
+
+  --radius: 0.125rem;
 }
 
 .dark {
-  --background: #0a0a0a;
-  --foreground: #f5f5f5;
-  --card: #141414;
-  --card-foreground: #f5f5f5;
-  --primary: #f5f5f5;
-  --primary-foreground: #0a0a0a;
-  --muted: #181818;
-  --muted-foreground: #a3a3a3;
-  --accent: #f5f5f5;
-  --accent-foreground: #0a0a0a;
-  --destructive: #ef4444;
-  --border: #262626;
-  --input: #262626;
-  --ring: #f5f5f5;
+  /* PALETA "PETROLEO Y OXIDO" - tema oscuro. Compuesto, no invertido y SIN
+     negros: el lienzo/navbar es petrol profundo; cada campo vive en la misma
+     familia (petrol -> azul -> teal -> orxido/rust). Teal y rust se profundizan
+     levemente para que el texto secundario pase AA sobre el fondo. */
+  --pal-paper: #f4f1e8;
+  --pal-ink: #0a0a0a;
+  --pal-ink-strong: #0a0a0a;
+  --pal-petrol: #17313c;
+  --pal-blue: #254e72;
+  --pal-teal: #1a5c6e;
+  --pal-rust: #8a4326;
+  --pal-orange: #c35929;
 
+  /* Acento legible como TEXTO sobre los campos oscuros */
+  --accent-ink: #f0cba8;
+
+  --field-petrol-bg: #17313c;
+  --field-petrol-fg: #f4f1e8;
+  --field-blue-bg: #254e72;
+  --field-blue-fg: #f4f1e8;
+  --field-teal-bg: #1a5c6e;
+  --field-teal-fg: #f4f1e8;
+  --field-rust-bg: #8a4326;
+  --field-rust-fg: #f4f1e8;
+  --field-paper-bg: #1e3b46;
+  --field-paper-fg: #f4f1e8;
+
+  --background: #17313c;
+  --foreground: #f4f1e8;
+
+  --card: #1e3b46;
+  --card-foreground: #f4f1e8;
+  --popover: #1e3b46;
+  --popover-foreground: #f4f1e8;
+
+  --primary: var(--pal-orange);
+  --primary-foreground: var(--pal-ink-strong);
+  --secondary: #254e72;
+  --secondary-foreground: #f4f1e8;
+
+  --muted: #1e3b46;
+  --muted-foreground: #b7c5c7;
+  --accent: #f4f1e8;
+  --accent-foreground: #17313c;
+
+  --destructive: #e2554a;
+  --border: #35596a;
+  --input: #35596a;
+  --ring: var(--pal-orange);
+}
+
+/* ---------------------------------------------------------------------------
+   Campos: el color posee la region entera.
+   Cada .field-* remapea los roles semanticos dentro de su alcance, asi los
+   hijos existentes (text-foreground, text-muted-foreground, border-border,
+   bg-muted, text-primary...) se adaptan solos sin reescribir cada componente.
+   El texto secundario deriva del tono del campo, no de un gris lavado.
+--------------------------------------------------------------------------- */
+.field-petrol,
+.field-blue,
+.field-teal,
+.field-rust,
+.field-paper {
+  background-color: var(--f-bg);
+  color: var(--f-fg);
+  caret-color: var(--f-fg);
+
+  --background: var(--f-bg);
+  --foreground: var(--f-fg);
+  --card: var(--f-bg);
+  --card-foreground: var(--f-fg);
+  --popover: var(--f-bg);
+  --popover-foreground: var(--f-fg);
+  --muted: color-mix(in oklch, var(--f-fg) 12%, var(--f-bg));
+  --muted-foreground: color-mix(in oklch, var(--f-fg) 88%, var(--f-bg));
+  --secondary: color-mix(in oklch, var(--f-fg) 16%, var(--f-bg));
+  --secondary-foreground: var(--f-fg);
+  --accent: var(--f-fg);
+  --accent-foreground: var(--f-bg);
+  --border: color-mix(in oklch, var(--f-fg) 26%, var(--f-bg));
+  --input: color-mix(in oklch, var(--f-fg) 30%, var(--f-bg));
+  --ring: var(--f-fg);
+}
+
+.field-petrol {
+  --f-bg: var(--field-petrol-bg);
+  --f-fg: var(--field-petrol-fg);
+}
+.field-blue {
+  --f-bg: var(--field-blue-bg);
+  --f-fg: var(--field-blue-fg);
+}
+.field-teal {
+  --f-bg: var(--field-teal-bg);
+  --f-fg: var(--field-teal-fg);
+}
+.field-rust {
+  --f-bg: var(--field-rust-bg);
+  --f-fg: var(--field-rust-fg);
+}
+.field-paper {
+  --f-bg: var(--field-paper-bg);
+  --f-fg: var(--field-paper-fg);
+}
+
+/* Firma de la imprenta: donde dos tintas se solapan nace una tercera.
+   Banda de sobreimpresion (azul -> teal -> rust -> naranja) entre campos. */
+.overprint {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--pal-blue) 0%,
+    var(--pal-teal) 35%,
+    var(--pal-rust) 70%,
+    var(--pal-orange) 100%
+  );
+}
+
+::selection {
+  background: var(--pal-orange);
+  color: var(--pal-ink-strong);
+}
+
+/* Velo de superposicion neutro (no hereda el campo de la seccion). */
+.scrim {
+  background-color: color-mix(in oklch, #05070a 72%, transparent);
 }
 
 @layer base {
@@ -76,11 +230,17 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 72px;
+    caret-color: var(--foreground);
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-geist-sans);
+    font-family: var(--font-sans-body);
     scroll-snap-type: y proximity;
+    caret-color: var(--foreground);
+  }
+  input,
+  textarea {
+    caret-color: var(--foreground);
   }
   ::-webkit-scrollbar {
     width: 8px;
@@ -90,15 +250,15 @@
   }
   ::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 4px;
+    border-radius: 1px;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: var(--accent);
   }
   .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transform: translateY(16px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal.visible {
     opacity: 1;
@@ -106,8 +266,8 @@
   }
   .reveal-left {
     opacity: 0;
-    transform: translateX(-40px);
-    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transform: translateX(-24px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal-left.visible {
     opacity: 1;
@@ -115,8 +275,8 @@
   }
   .reveal-right {
     opacity: 0;
-    transform: translateX(40px);
-    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transform: translateX(24px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal-right.visible {
     opacity: 1;
@@ -124,19 +284,91 @@
   }
   .reveal-scale {
     opacity: 0;
-    transform: scale(0.92);
-    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    transform: scale(0.98);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal-scale.visible {
     opacity: 1;
     transform: scale(1);
   }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+}
+
+/* ---------------------------------------------------------------------------
+   Firma de motion editorial (autoral)
+   - hero-mask / hero-line: la tipografia emerge desde una mascara, linea a linea
+   - hero-rule: una regla fina se traza de izquierda a derecha
+   - hero-fade: entrada escalonada del resto del contenido
+   Los estados iniciales viven SOLO dentro de los keyframes: si la animacion no
+   corre, el contenido se pinta en su estado final (nunca queda oculto).
+--------------------------------------------------------------------------- */
+@keyframes editorial-rise {
+  from {
+    transform: translateY(115%);
   }
-  @keyframes pulse-ring {
-    0%, 100% { transform: scale(1); opacity: 0.2; }
-    50% { transform: scale(1.08); opacity: 0.1; }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes editorial-rule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes editorial-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+
+.hero-line {
+  display: block;
+  animation: editorial-rise 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-rule {
+  transform-origin: left center;
+  animation: editorial-rule 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-fade {
+  animation: editorial-fade 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ---------------------------------------------------------------------------
+   Accesibilidad: respetar prefers-reduced-motion
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { ThemeToggle } from "./ThemeToggle"
 import { LanguageToggle } from "./LanguageToggle"
 import { useI18n } from "./LanguageProvider"
@@ -14,13 +14,24 @@ const navLinks = [
 
 const sectionIds = navLinks.map((l) => l.href.slice(1))
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState("hero")
   const { t } = useI18n()
 
+  const headerRef = useRef<HTMLElement>(null)
+  const toggleRef = useRef<HTMLButtonElement>(null)
+
   const closeMenu = useCallback(() => setMenuOpen(false), [])
+
+  const closeAndRestoreFocus = useCallback(() => {
+    setMenuOpen(false)
+    toggleRef.current?.focus()
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -46,21 +57,67 @@ export function Header() {
     return () => observers.forEach((o) => o.disconnect())
   }, [])
 
+  // Menu movil: focus trap + Escape. El foco entra al abrir y vuelve al
+  // boton hamburguesa al cerrar, para no perderlo en el body.
   useEffect(() => {
     if (!menuOpen) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeMenu()
+
+    const getFocusable = () =>
+      Array.from(
+        headerRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []
+      ).filter((el) => el.getClientRects().length > 0)
+
+    const raf = requestAnimationFrame(() => getFocusable()[0]?.focus())
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault()
+        closeAndRestoreFocus()
+        return
+      }
+      if (e.key !== "Tab") return
+
+      const items = getFocusable()
+      if (items.length === 0) return
+
+      const first = items[0]
+      const last = items[items.length - 1]
+      const active = document.activeElement
+
+      if (!active || !headerRef.current?.contains(active)) {
+        e.preventDefault()
+        first.focus()
+        return
+      }
+
+      if (e.shiftKey && active === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
-    document.addEventListener("keydown", onKey)
-    return () => document.removeEventListener("keydown", onKey)
-  }, [menuOpen, closeMenu])
+
+    document.addEventListener("keydown", onKeyDown)
+    return () => {
+      document.removeEventListener("keydown", onKeyDown)
+      cancelAnimationFrame(raf)
+    }
+  }, [menuOpen, closeAndRestoreFocus])
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/85 backdrop-blur-md transition-shadow duration-300 ${scrolled ? "shadow-lg shadow-black/5" : ""}`}>
+    <header
+      ref={headerRef}
+      className={`fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/85 backdrop-blur-md transition-shadow duration-300 ${scrolled ? "shadow-lg shadow-black/5" : ""}`}
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-center gap-6 px-6 py-4">
         <nav
-          className={`fixed top-0 right-0 z-40 flex h-screen w-64 flex-col border-l border-border bg-background p-8 pt-24 transition-transform duration-300 md:static md:h-auto md:w-auto md:flex-row md:border-none md:bg-transparent md:p-0 md:pt-0 md:translate-x-0 ${menuOpen ? "translate-x-0" : "translate-x-full"}`}
-          aria-label={t("nav.home")}
+          id="mobile-menu"
+          aria-label={t("nav.main")}
+          className={`fixed top-0 right-0 z-40 flex h-screen w-64 flex-col border-l border-border bg-background p-8 pt-24 transition-[transform,visibility] duration-300 md:static md:h-auto md:w-auto md:flex-row md:border-none md:bg-transparent md:p-0 md:pt-0 md:translate-x-0 md:visible ${
+            menuOpen ? "translate-x-0 visible" : "invisible translate-x-full"
+          }`}
         >
           <ul className="flex flex-col gap-6 md:flex-row md:gap-8">
             {navLinks.map((link) => {
@@ -90,6 +147,7 @@ export function Header() {
           <ThemeToggle />
         </div>
         <button
+          ref={toggleRef}
           type="button"
           className="flex flex-col gap-1.5 p-1 md:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -103,12 +161,10 @@ export function Header() {
         </button>
       </div>
       {menuOpen && (
-        <button
-          type="button"
+        <div
+          aria-hidden="true"
           className="fixed inset-0 z-30 bg-black/30 md:hidden"
-          onClick={closeMenu}
-          aria-label="Close menu"
-          tabIndex={-1}
+          onClick={closeAndRestoreFocus}
         />
       )}
     </header>
