@@ -176,6 +176,11 @@
   --f-bg: var(--field-contrast-bg);
   --f-fg: var(--field-contrast-fg);
   --accent-ink: var(--field-contrast-accent);
+  /* Controles nativos (casilla) segun el fondo real, opuesto al del tema */
+  color-scheme: dark;
+}
+.dark .field-contrast {
+  color-scheme: light;
 }
 
 /* Titulares: Archivo ancho y pesado, la firma de la pagina. */
@@ -229,8 +234,8 @@
   }
   .reveal {
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal.visible {
     opacity: 1;

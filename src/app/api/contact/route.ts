@@ -19,14 +19,16 @@ const clean = (value: unknown) => (typeof value === "string" ? value.trim() : ""
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { consent, website } = body as {
+    const { consent, hp_token: honeypot } = body as {
       consent?: unknown
-      website?: unknown
+      hp_token?: unknown
     }
 
     // Campo trampa: solo un bot lo rellena. Se responde exito sin enviar nada,
-    // para que no sepa que fue detectado.
-    if (website) {
+    // para que no sepa que fue detectado. Se registra para poder diagnosticar
+    // un mensaje legitimo descartado.
+    if (honeypot) {
+      console.warn("Contact form: honeypot filled — message discarded")
       return NextResponse.json({ success: true })
     }
 
@@ -71,15 +73,24 @@ export async function POST(request: Request) {
       )
     }
 
-    if (apiKey === "re_test_key_example_123456" || apiKey.startsWith("re_test_")) {
-      return NextResponse.json({ success: true })
+    // Una clave de prueba no envia nada: en local simula el exito para poder
+    // probar el formulario, pero en produccion debe verse como un error.
+    if (apiKey.startsWith("re_test_")) {
+      if (process.env.NODE_ENV !== "production") {
+        return NextResponse.json({ success: true })
+      }
+      console.error("RESEND_API_KEY is a test key — no email was sent")
+      return NextResponse.json(
+        { error: "Contact form is not configured yet" },
+        { status: 501 }
+      )
     }
 
     const { Resend } = await import("resend")
     const resend = new Resend(apiKey)
 
     const { error } = await resend.emails.send({
-      from: "Portfolio Contact <onboarding@resend.dev>",
+      from: "Portfolio Contact <contacto@manuelpernia.dev>",
       to: "manuelk211995@gmail.com",
       replyTo: email,
       subject: `Portfolio Contact — ${escapeHtml(name)}`,

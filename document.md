@@ -741,6 +741,35 @@ Contraste calculado: acento sobre petróleo 4.54:1, negro sobre acento 6.59:1, p
 
 **Pendiente:** `public/economos-v2.png` ya no se usa. CalcuVolt sigue con su maqueta.
 
+**Despliegue:** commit `05909d2` en producción. En `www.manuelpernia.dev`, `/`, `/es`, `/privacidad` y `/es/cookies` responden 200 con el contenido nuevo; la API rechaza un correo inválido (400) y acepta sin enviar el campo trampa (200). Falta probar un envío real y responderlo.
+
+---
+
+## 33. "Mensaje enviado" sin correo y animación de Proyectos que no se veía
+
+**A. El formulario dice "Mensaje enviado" pero no llega nada**
+- **Síntoma:** reportado por el usuario tras desplegar `05909d2`.
+- **Causa de fondo:** la API respondía éxito con cualquier clave `re_test_` sin enviar. La clave de `.env.local` es de ese tipo; la de Vercel no se puede leer desde aquí, así que no está confirmado que también lo sea.
+- **Otra posible causa (introducida en §31):** el campo trampa `website` podía ser autocompletado por el navegador y descartar el mensaje en silencio.
+- **Solución:** en producción, una clave `re_test_` responde 501 y el formulario muestra error. El campo trampa pasa a `hp_token`, con aviso en el log si se activa.
+- **Corrección del diagnóstico:** el usuario ya tenía una clave real ("Onboarding", permiso de envío) con último uso hacia las pruebas del formulario, lo que apunta a que la petición sí llegó a Resend y descarta la clave de prueba como causa probable. No hace falta crear otra.
+- **Revisión del buzón (1 nov 2026):** el formulario entregó correctamente hasta el 14 oct (último: "Portfolio Contact — manus"). La prueba de hoy no aparece en entrada, archivados ni papelera de `manuelk211995@gmail.com`, aunque el buzón sigue recibiendo otros correos. La búsqueda de spam dio vacío, pero la herramienta puede filtrar ese contenido, así que spam no está descartado. El cambio de código desde esa fecha es `replyTo` y la validación (§31).
+- **Resend confirma:** 3 envíos de hoy ("manus", "manus", "manuel") a `manuelk211995@gmail.com` con estado Delivered. La clave y la API funcionan; Gmail los aceptó. No aparecen en entrada, archivados ni papelera vía búsqueda, y la herramienta no ve spam (`in:spam` vacío), así que la hipótesis principal es spam.
+- **Hipótesis sin comprobar:** los correos con `replyTo` (desde §31) pueden puntuar peor en Gmail; los anteriores llegaron a la entrada sin él.
+- **Causa confirmada por el usuario:** los correos están en spam de Gmail.
+- **Solución:** registros DKIM, SPF y DMARC añadidos en Porkbun y comprobados públicamente; el usuario confirmó el dominio verificado en Resend. El remitente pasa a `Portfolio Contact <contacto@manuelpernia.dev>`. No hace falta buzón: las respuestas van por `replyTo`.
+- **Contratiempo:** la traducción automática del navegador rompió el panel de Resend (`removeChild`) y mostró `p=ninguno` en Porkbun; el valor real era `p=none`.
+- **Pendiente:** desplegar y confirmar con un envío real que llega a la bandeja de entrada.
+- **Casilla de privacidad:** aparecía oscura sin marcar por el tema oscuro sobre fondo claro; `.field-contrast` ahora fija su `color-scheme`.
+
+**B. La animación de Proyectos no se veía**
+- **Causa:** el temporizador de 5 s de §31 mostraba las tarjetas aunque el observer funcionara, mientras el usuario seguía en el Hero. Era un error de ese compromiso.
+- **Solución:** el temporizador se cancela con el primer aviso del observer, así que solo actúa si este no funciona. Entrada más visible: margen inferior 20 %, desplazamiento 40 px, 0.9 s y escalonado de 180 ms.
+
+**Verificación:** `tsc`, `lint`, `build` e `impeccable detect src/` ✅. Con `next start` y clave de prueba: mensaje válido → 501; `hp_token` → 200 sin envío. En el navegador, a más de 5 s y sin scroll, ninguna de las 5 secciones se revela sola, página hidratada.
+
+**Sin verificar:** la entrada en movimiento (ventana sin dibujar) y el envío real.
+
 ---
 
 ## Comandos útiles

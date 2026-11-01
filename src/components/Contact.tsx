@@ -44,7 +44,7 @@ export function Contact() {
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
       message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
       consent: true,
-      website: (form.elements.namedItem("website") as HTMLInputElement).value,
+      hp_token: (form.elements.namedItem("hp_token") as HTMLInputElement).value,
     }
 
     try {
@@ -129,15 +129,18 @@ export function Contact() {
             />
           </div>
 
-          {/* Campo trampa para bots: fuera de la vista y del orden de tabulacion. */}
+          {/* Campo trampa para bots: fuera de la vista y del orden de tabulacion.
+              Nombre sin significado para que el navegador no lo autocomplete. */}
           <div aria-hidden="true" className="absolute -left-[9999px]">
-            <label htmlFor="website">Website</label>
+            <label htmlFor="hp_token">Leave empty</label>
             <input
-              id="website"
+              id="hp_token"
               type="text"
-              name="website"
+              name="hp_token"
               tabIndex={-1}
               autoComplete="off"
+              data-lpignore="true"
+              data-1p-ignore
             />
           </div>
 

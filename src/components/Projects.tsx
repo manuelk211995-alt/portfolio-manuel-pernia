@@ -223,7 +223,7 @@ function ProjectRow({
       {/* Entrada escalonada: las columnas de una misma fila aparecen en orden. */}
       <div
         ref={ref}
-        style={{ transitionDelay: `${index * 100}ms` }}
+        style={{ transitionDelay: `${index * 180}ms` }}
         className={`reveal h-full ${isVisible ? "visible" : ""}`}
       >
         <article className="group flex h-full min-w-0 flex-col">
