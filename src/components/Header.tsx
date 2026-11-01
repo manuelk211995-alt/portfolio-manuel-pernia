@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react"
 import { ThemeToggle } from "./ThemeToggle"
 import { LanguageToggle } from "./LanguageToggle"
 import { useI18n } from "./LanguageProvider"
+import { localePath } from "@/lib/site"
 
 const navLinks = [
   { href: "#hero", key: "nav.home" },
@@ -20,8 +21,8 @@ const FOCUSABLE =
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState("hero")
-  const { t } = useI18n()
+  const [activeSection, setActiveSection] = useState("")
+  const { t, language } = useI18n()
 
   const headerRef = useRef<HTMLElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
@@ -126,7 +127,7 @@ export function Header() {
               return (
                 <li key={link.href}>
                   <a
-                    href={link.href}
+                    href={`${localePath(language, "/")}${link.href}`}
                     onClick={closeMenu}
                     aria-current={isActive ? "page" : undefined}
                     className={`relative transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-foreground after:transition-all ${

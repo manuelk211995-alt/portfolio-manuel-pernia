@@ -34,7 +34,7 @@ export function Hero() {
             <span className="hero-line" style={{ animationDelay: "0.05s" }}>
               Manuel
             </span>
-          </span>
+          </span>{" "}
           <span className="hero-mask">
             <span className="hero-line" style={{ animationDelay: "0.18s" }}>
               Pernia

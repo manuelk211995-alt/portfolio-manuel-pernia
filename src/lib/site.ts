@@ -1,4 +1,4 @@
-export const siteUrl = "https://manuelpernia.dev"
+export const siteUrl = "https://www.manuelpernia.dev"
 export const siteName = "Manuel Pernia"
 
 export const locales = ["en", "es"] as const

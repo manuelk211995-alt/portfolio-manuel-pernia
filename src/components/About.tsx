@@ -116,6 +116,7 @@ export function About() {
                         className="inline-flex items-center gap-1.5"
                       >
                         <tech.Icon
+                          title=""
                           className="size-3.5 shrink-0 text-foreground"
                           aria-hidden="true"
                         />

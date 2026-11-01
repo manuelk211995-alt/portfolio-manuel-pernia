@@ -564,6 +564,59 @@ Salidas: **exit 0 = sin hallazgos**, **2 = hay hallazgos**, **1 = no se pudo esc
 
 ---
 
+## 25. Páginas legales traducidas al inglés (cierra el compromiso de §24)
+
+**Síntoma:** `/privacidad` y `/cookies` declaraban `lang="en"` y metadata en inglés, pero el cuerpo seguía en español, así que esas URLs no coincidían con su `hreflang`.
+
+**Causa:** en §24 solo se localizó la metadata; las páginas ignoraban `params.lang` al renderizar.
+
+**Solución:** en `src/app/[lang]/privacidad/page.tsx` y `src/app/[lang]/cookies/page.tsx` la página lee `params.lang` y renderiza `PrivacyEn`/`PrivacyEs` o `CookiesEn`/`CookiesEs`. El `<h1>` sale de `titleByLocale`. Se añadió un helper local `Section`, y `space-y-8` en el contenedor sustituye a los `mb-8` por sección. El texto español no cambia. Los enlaces de ayuda de navegadores van por idioma (`browserLinksByLocale`), con las URLs en inglés comprobadas con 200.
+
+**Decisión:** el texto legal vive en cada página y no en `src/lib/i18n.ts`, porque lleva enlaces dentro de los párrafos y solo se usa ahí.
+
+**Verificación:** `npm run lint` ✅ · `npx tsc --noEmit` ✅ · `npm run build` ✅. Con `next start -p 3001`, las 4 URLs responden 200 con `lang`, `h1`, `h2` y fecha en el idioma correcto.
+
+**Pendiente:**
+- La traducción no tiene revisión legal.
+- Ambas políticas dicen que las preferencias recuerdan "el idioma", pero desde §24 el idioma va por URL y no se guarda. Se tradujo fiel; falta decidir si se corrige el texto.
+
+---
+
+## 26. Correcciones de auditoría: selector `/es/en`, anclas en páginas legales, canonical `www`, h1 e iconos
+
+**Origen:** lista de mejoras pegada por el usuario. El punto de traducciones y metadatos legales quedó resuelto en §25.
+
+**1. Selector de idioma enviaba a `/es/en` (404 en producción)**
+- **Síntoma:** el HTML de `/` tenía `href="/es/en"`, y `/privacidad` tenía `/es/en/privacidad`.
+- **Causa:** al prerenderizar, `usePathname()` devuelve la ruta interna reescrita por el proxy (`/en`), no la pública. `LanguageToggle` solo le añadía `/es` delante.
+- **Solución:** quitar primero el prefijo de cualquier locale y construir la ruta con `localePath()`. Así `href` también coincide entre servidor y cliente.
+
+**2. Navegación rota en páginas legales**
+- **Síntoma:** en `/privacidad` y `/cookies`, los enlaces del navbar y "↑ Home" del footer no hacían nada, porque apuntaban a anclas que solo existen en la portada.
+- **Solución:** `Header` y `Footer` usan `${localePath(language, "/")}#seccion` (`/#about`, `/es#about`).
+- **Extra:** `activeSection` arrancaba en `"hero"`, y en las páginas legales marcaba Home con `aria-current="page"`. Ahora arranca vacío y lo fija el observer.
+
+**3. Canonical apuntaba a un dominio que redirige**
+- **Síntoma:** `manuelpernia.dev` redirige con 308 a `www.manuelpernia.dev`, pero canonical, `hreflang`, `og:url`, sitemap, robots y JSON-LD usaban el dominio sin `www`.
+- **Solución:** `siteUrl = "https://www.manuelpernia.dev"` en `src/lib/site.ts`, porque todo se deriva de ahí.
+- **Decisión:** se alineó el código con la redirección ya activa en el hosting, que no se tocó. Si se prefiere el dominio sin `www`, hay que invertir la redirección y cambiar `siteUrl`. El texto `manuelpernia.dev` de la imagen OG (`og-image.tsx`) se dejó como marca visual.
+
+**4. Iconos de skills**
+- **Causa:** son `<svg>`, no `<img>`, así que `alt` no aplica. Ya tenían `aria-hidden`, pero la librería inyecta un `<title>` con el nombre, que duplicaba el texto en el HTML.
+- **Solución:** `title=""` en `tech.Icon` (`About.tsx`), el equivalente a `alt=""`.
+
+**5. Espacio en el h1**
+- **Síntoma:** el texto del h1 era `ManuelPernia`.
+- **Solución:** `{" "}` entre los dos `span` de `Hero.tsx`. Son `display: block`, así que no cambia el diseño.
+
+**Verificación:** `npm run lint` ✅ · `npx tsc --noEmit` ✅ · `npm run build` ✅. Con `next start -p 3001` y clics en el navegador integrado: el selector funciona en ambos sentidos en `/privacidad`, `/#about` desde la página legal deja About bajo el navbar, y la consola no tiene errores.
+
+**Contratiempo:** con la ventana de Claude minimizada, las capturas salen desplazadas o sin el contenido del Hero, aunque el DOM esté bien (animaciones `finished`, opacidad 1). Se debe a que la página no se dibuja. No sirven como prueba visual.
+
+**Pendiente:** revisión visual con la ventana abierta, y comprobar en vivo tras desplegar. También valorar cambiar la redirección de `/en` en `proxy.ts` de 307 a 308 (§24 la documenta como 308, pero responde 307).
+
+---
+
 ## Comandos útiles
 
 ```powershell

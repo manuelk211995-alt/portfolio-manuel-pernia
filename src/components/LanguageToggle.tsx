@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useI18n } from "./LanguageProvider"
 import { buttonVariants } from "@/components/ui/button"
+import { localePath } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 export function LanguageToggle() {
@@ -11,9 +12,10 @@ export function LanguageToggle() {
   const pathname = usePathname()
   const isEs = language === "es"
 
-  const target = isEs
-    ? pathname.replace(/^\/es(?=\/|$)/, "") || "/"
-    : `/es${pathname === "/" ? "" : pathname}`
+  // Al prerenderizar, usePathname devuelve la ruta interna reescrita por el
+  // proxy ("/en/..."), asi que se quita el prefijo de cualquier locale.
+  const bare = pathname.replace(/^\/(en|es)(?=\/|$)/, "") || "/"
+  const target = localePath(isEs ? "en" : "es", bare)
 
   return (
     <Link

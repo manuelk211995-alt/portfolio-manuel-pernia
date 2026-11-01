@@ -35,7 +35,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="#hero"
+                  href={`${localePath(language, "/")}#hero`}
                   className="transition-colors hover:text-foreground"
                 >
                   ↑ {t("nav.home")}
