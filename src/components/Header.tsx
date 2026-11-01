@@ -7,9 +7,8 @@ import { useI18n } from "./LanguageProvider"
 import { localePath } from "@/lib/site"
 
 const navLinks = [
-  { href: "#hero", key: "nav.home" },
-  { href: "#about", key: "nav.about" },
   { href: "#projects", key: "nav.projects" },
+  { href: "#about", key: "nav.about" },
   { href: "#contact", key: "nav.contact" },
 ]
 
@@ -112,54 +111,63 @@ export function Header() {
       ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/85 backdrop-blur-md transition-shadow duration-300 ${scrolled ? "shadow-lg shadow-black/5" : ""}`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-center gap-6 px-6 py-4">
-        <nav
-          id="mobile-menu"
-          aria-label={t("nav.main")}
-          className={`fixed top-0 right-0 z-40 flex h-screen w-64 flex-col border-l border-border bg-background p-8 pt-24 transition-[transform,visibility] duration-300 md:static md:h-auto md:w-auto md:flex-row md:border-none md:bg-transparent md:p-0 md:pt-0 md:translate-x-0 md:visible ${
-            menuOpen ? "translate-x-0 visible" : "invisible translate-x-full"
-          }`}
+      <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-6 px-6 py-3">
+        <a
+          href={`${localePath(language, "/")}#hero`}
+          onClick={closeMenu}
+          className="py-2 font-extrabold [font-stretch:125%]"
         >
-          <ul className="flex flex-col gap-6 md:flex-row md:gap-8">
-            {navLinks.map((link) => {
-              const sectionId = link.href.slice(1)
-              const isActive = activeSection === sectionId
-              return (
-                <li key={link.href}>
-                  <a
-                    href={`${localePath(language, "/")}${link.href}`}
-                    onClick={closeMenu}
-                    aria-current={isActive ? "page" : undefined}
-                    className={`relative transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-foreground after:transition-all ${
-                      isActive
-                        ? "text-foreground font-semibold after:w-full"
-                        : "text-muted-foreground hover:text-foreground after:w-0 hover:after:w-full"
-                    }`}
-                  >
-                    {t(link.key)}
-                  </a>
-                </li>
-              )
-            })}
-          </ul>
-        </nav>
-        <div className="flex items-center gap-2">
-          <LanguageToggle />
-          <ThemeToggle />
+          M. Pernia
+        </a>
+        <div className="flex items-center gap-4 md:gap-7">
+          <nav
+            id="mobile-menu"
+            aria-label={t("nav.main")}
+            className={`fixed top-0 right-0 z-40 flex h-screen w-64 flex-col border-l border-border bg-background p-8 pt-24 transition-[transform,visibility] duration-300 md:static md:h-auto md:w-auto md:flex-row md:border-none md:bg-transparent md:p-0 md:pt-0 md:translate-x-0 md:visible ${
+              menuOpen ? "translate-x-0 visible" : "invisible translate-x-full"
+            }`}
+          >
+            <ul className="flex flex-col gap-6 md:flex-row md:gap-8">
+              {navLinks.map((link) => {
+                const sectionId = link.href.slice(1)
+                const isActive = activeSection === sectionId
+                return (
+                  <li key={link.href}>
+                    <a
+                      href={`${localePath(language, "/")}${link.href}`}
+                      onClick={closeMenu}
+                      aria-current={isActive ? "page" : undefined}
+                      className={`relative transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-foreground after:transition-all ${
+                        isActive
+                          ? "text-foreground font-semibold after:w-full"
+                          : "text-muted-foreground hover:text-foreground after:w-0 hover:after:w-full"
+                      }`}
+                    >
+                      {t(link.key)}
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
+          <div className="flex items-center gap-2">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
+          <button
+            ref={toggleRef}
+            type="button"
+            className="flex size-11 flex-col items-center justify-center gap-1.5 md:hidden"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={t("menu.toggle")}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+          >
+            <span className={`block h-0.5 w-6 bg-foreground transition-all ${menuOpen ? "translate-y-[8px] rotate-45" : ""}`} />
+            <span className={`block h-0.5 w-6 bg-foreground transition-all ${menuOpen ? "opacity-0" : ""}`} />
+            <span className={`block h-0.5 w-6 bg-foreground transition-all ${menuOpen ? "-translate-y-[8px] -rotate-45" : ""}`} />
+          </button>
         </div>
-        <button
-          ref={toggleRef}
-          type="button"
-          className="flex flex-col gap-1.5 p-1 md:hidden"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={t("menu.toggle")}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-        >
-          <span className={`block h-0.5 w-6 bg-foreground transition-all ${menuOpen ? "translate-y-[8px] rotate-45" : ""}`} />
-          <span className={`block h-0.5 w-6 bg-foreground transition-all ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`block h-0.5 w-6 bg-foreground transition-all ${menuOpen ? "-translate-y-[8px] -rotate-45" : ""}`} />
-        </button>
       </div>
       {menuOpen && (
         <div

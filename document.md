@@ -617,6 +617,132 @@ Salidas: **exit 0 = sin hallazgos**, **2 = hay hallazgos**, **1 = no se pudo esc
 
 ---
 
+## 27. Se quita "Portfolio" de la sección de Proyectos
+
+**Petición:** dejar solo Economos, CalcuVolt y VolleyPlan.
+
+**Cambio:** eliminada la entrada de `projects` en `src/components/Projects.tsx` y la clave `projects.portfolio.desc` (EN y ES) en `src/lib/i18n.ts`. La numeración del índice se calcula sola.
+
+**Contratiempo:** un comando que incluía `git rm` de `public/portfolio-chatgpt.png` y `public/portfolio-promo.mp4` salió como rechazado por el usuario, pero después `git status` mostró ambos archivos como borrados. Se restauraron con `git restore --source=HEAD --staged --worktree`. Lección: tras un comando rechazado, revisar `git status` antes de dar por hecho que no se aplicó nada.
+
+**Pendiente:** esos dos archivos ya no los usa nadie (1.7 MB, y se siguen sirviendo en sus URLs). Falta decidir si se borran.
+
+**Verificación:** `npx tsc --noEmit` ✅ · `npm run lint` ✅ · `npm run build` ✅. El HTML generado de `/` contiene los 3 proyectos y ninguna tarjeta Portfolio. La compilación se hizo con los dos archivos ausentes, y no se usan en el código.
+
+---
+
+## 28. Propuesta de rediseño en lienzo Design (sin aplicar)
+
+**Petición:** rediseñar el portfolio con la función Design y ver cómo quedaría antes de aplicarlo.
+
+**Estado:** dos direcciones en un lienzo privado, sin ningún cambio en el código del sitio: https://claude.ai/artifact/UEHGLUpmFMyhvrYxLYkWcV
+- **A · Banco de trabajo:** fondo petróleo, Archivo y bloques de proyecto a todo el ancho (azul, teal, óxido).
+- **B · Índice técnico:** fondo papel, Instrument Serif + Instrument Sans y los proyectos en 3 columnas.
+
+**Decisiones:** se mantienen la paleta de §22 y los textos actuales en español; los proyectos pasan a verse con imagen justo después del Hero y antes de About.
+
+**Contratiempo:** publicar desde la ruta temporal abreviada (`MANUEL~1`) fue bloqueado por un permiso de lectura; con la ruta completa funcionó.
+
+**Observación:** las imágenes de Economos y CalcuVolt parecen maquetas generadas con IA (textos ilegibles), no capturas reales. Las de VolleyPlan sí son capturas reales.
+
+**Pendiente:** elegir dirección antes de implementarla.
+
+**Paleta ajustada (segunda ronda, también sin aplicar):** se añadieron al lienzo dos variantes, "A · Paleta ajustada" y "B · Paleta ajustada", junto a las originales. Papel y petróleo se quedan; `#e8743b` sustituye a `#c35929` como acento; teal `#1a5c6e` queda como único secundario en una zona; óxido `#8a4326` solo para texto sobre papel (B); el azul se retira.
+
+Contraste calculado: acento sobre petróleo 4.54:1, negro sobre acento 6.59:1, papel sobre teal 6.64:1, óxido sobre papel 6.39:1. El acento sobre teal (2.50) y sobre papel (2.66) no pasa como texto, así que ahí solo se usa como relleno de botón.
+
+---
+
+## 29. Rediseño "Banco de trabajo" con paleta ajustada aplicado al código
+
+**Petición:** implementar la versión "A · Paleta ajustada" del lienzo de §28. Sustituye al Editorial Index de §17 y a la paleta de §22.
+
+**Cambios:**
+- **Paleta (`globals.css`):** acento `#e8743b`; teal `#1a5c6e` como único secundario. Se eliminan `.field-blue`, `.field-rust`, `.overprint` y los tokens `--pal-blue|teal|rust`. Nueva `.field-contrast`, sección invertida respecto al lienzo (Contacto).
+- **Regla de acento:** `--accent-ink` es `#e8743b` en oscuro, `#8a4326` en claro. En teal oscuro pasa a ser el color del texto, porque el acento no llega a AA (2.50).
+- **Tipografía:** Archivo variable con eje `wdth` (`next/font`), clase `.type-display`. Se retiran Geist, Geist Mono, Instrument Serif e Instrument Sans.
+- **Estructura:** orden Hero → Proyectos → About → Contacto. Proyectos con imagen grande (`ProjectRow`); skills como texto sin iconos; se quita el scroll-snap.
+- **Header:** marca "M. Pernia" a la izquierda; "Inicio" sale del navbar (queda en el footer).
+- **Demos:** el botón Demo abre `DemoDialog` con el video; la galería de VolleyPlan vive en la fila y respeta `prefers-reduced-motion`.
+- **Contacto:** etiquetas visibles y campos blancos. Se mantienen email y ubicación, aunque la maqueta no los mostraba, para no perder esa información.
+- **Otros:** controles del navbar y galería a 44 px; acento nuevo en `icon.svg`, `apple-icon` y `og-image`; claves i18n sin uso eliminadas.
+
+**Verificación:**
+- `tsc`, `lint`, `build` ✅ · `impeccable detect src/` y `detect http://localhost:3001/es` → exit 0, sin hallazgos.
+- Medido en navegador (`/es`): contraste real en ambos temas, mínimo 4.54:1 (acento sobre petróleo); sin desborde horizontal a 375 px; 4 imágenes cargadas.
+- Diálogo: abre el video, Escape cierra y devuelve el foco. Formulario sin consentimiento: muestra el aviso y hace 0 peticiones. No se envió ningún correo real.
+
+**Sin verificar:** aspecto visual (ventana minimizada: capturas agotan el tiempo y `requestAnimationFrame` está detenido). Por eso tampoco se pudo confirmar el foco inicial del diálogo ni la animación del menú móvil. El tema claro no se dibujó en el lienzo: se derivó de los tokens.
+
+**Pendiente:**
+- Sustituir las imágenes de Economos y CalcuVolt (maquetas de IA) por capturas reales.
+- `@icons-pack/react-simple-icons` ya no se usa: valorar desinstalarla.
+- `og-image.tsx` conserva su degradado propio con los colores anteriores, salvo el acento.
+- Al usuario le gustan los proyectos uno al lado del otro: se dibujó "A · Proyectos en columnas" en el lienzo (toda la sección en teal, tres columnas, con título visible). Sin aplicar al código; falta su confirmación.
+
+---
+
+## 30. Proyectos en tres columnas y animaciones sutiles
+
+**Petición:** aplicar al código "A · Proyectos en columnas" del lienzo y añadir animaciones.
+
+**Cambios:**
+- **Proyectos:** toda la sección en `.field-teal`, título visible, 3 columnas con `auto-fit` (mínimo 340 px: 3 a 1440 px, 1 en móvil). Imágenes 3:2. Deja sin efecto lo descrito en §29 sobre las filas y la banda solo en CalcuVolt.
+- **Entrada escalonada:** `transitionDelay` de 0, 100 y 200 ms sobre `.reveal` en cada columna.
+- **Zoom al pasar el ratón:** imagen a `scale-[1.03]` con `group-hover`.
+- **`.link-draw`:** el subrayado sigue visible en reposo y se redibuja al pasar el ratón o con foco de teclado.
+- **`.btn-lift`:** el botón sube 2 px al pasar el ratón y vuelve al pulsar.
+- **Movimiento reducido:** se anulan retrasos, zoom y elevación. Sin librerías nuevas.
+
+**Verificación:** `tsc`, `lint`, `build` ✅ · `impeccable detect` en `src/` y en `/es` → exit 0. A 1440 px: 3 columnas de 432 px, misma altura y acciones alineadas. A 375 px: una columna, sin desborde.
+
+**Contratiempo:** con la ventana minimizada las tarjetas quedaban en `opacity: 0` tras hacer scroll. Causa comprobada del entorno: un `IntersectionObserver` de prueba sobre el navbar tampoco dispara y `requestAnimationFrame` está detenido.
+
+**Sin verificar (requiere ventana abierta):** aparición de las tarjetas, zoom, subrayado y botón en movimiento.
+
+**Decisión:** la siguiente sección puede asomar al hacer scroll. A 1440×900, "Sobre mí" deja "Hablemos" cortado a la mitad; se propuso una altura mínima y el usuario prefirió dejarlo así. No volver a `snap`: Proyectos no cabe en una pantalla.
+
+**Riesgo conocido, anterior a este cambio:** sin JavaScript, `.reveal` deja las secciones en `opacity: 0`. Resuelto en §31.
+
+---
+
+## 31. Mejoras antes del push: aparición garantizada, `replyTo` y antispam
+
+**1. Secciones que podían quedar invisibles**
+- **Causa:** `.reveal` parte de `opacity: 0` y dependía solo de JavaScript y de `IntersectionObserver`.
+- **Solución:** `<noscript>` en `[lang]/layout.tsx`, `@media print` en `globals.css` y, en `useReveal`, temporizador de seguridad de 5 s.
+- **Observer:** `threshold: 0.15` pasa a `rootMargin: "0px 0px -10% 0px"`, porque ese umbral podía no alcanzarse en bloques muy altos respecto a la pantalla.
+- **Compromiso:** quien pase más de 5 s en el Hero verá las secciones ya presentes, sin la entrada animada.
+
+**2. No se podía responder a los mensajes**
+- **Causa:** los correos llegan desde `onboarding@resend.dev`.
+- **Solución:** `replyTo: email` en `api/contact/route.ts`.
+
+**3. Spam en el formulario**
+- **Causa:** la API aceptaba cualquier texto.
+- **Solución:** validación de tipo, formato de correo y longitud (nombre 100, correo 254, mensaje 5000), saltos de línea fuera del nombre y campo trampa `website`, que responde éxito sin enviar. `maxLength` también en el formulario.
+- **Límite:** no hay limitación de peticiones por IP.
+
+**Verificación:** `tsc`, `lint`, `build` e `impeccable detect src/` ✅. La API devuelve 400 con datos vacíos, correo inválido, mensaje largo, nombre no textual y sin consentimiento; 200 con el campo trampa. En el navegador, las 5 secciones pasan a visibles a los 5 s y la consola no tiene errores.
+
+**Sin verificar:** el envío real con `replyTo`, para no mandar correos de prueba. Hay que enviar un mensaje de prueba tras desplegar y responderlo. La entrada animada al hacer scroll la confirmó el usuario en su navegador.
+
+---
+
+## 32. Capturas reales de Economos
+
+**Síntoma:** la tarjeta usaba `economos-v2.png`, una maqueta generada con IA y textos ilegibles.
+
+**Solución:** de las 8 capturas del usuario se eligieron 2, recortadas físicamente a 3:2: `public/economos-portada.jpg` (landing) y `public/economos-mercados.jpg` (Mercados). Rotan como en VolleyPlan.
+
+**Descartadas:** Favoritos y Perfil (correo a la vista y poco contenido), Mi cartera (todo en 0 € y correo), registro (formulario genérico), Funcionalidades (mucho texto) y chat (estrecha y baja resolución).
+
+**Regla:** recortar el archivo, no solo con CSS: lo que hay en `public/` es descargable. La captura original de Mercados tenía el correo en la barra lateral y una URL de Codespaces abajo; ambos quedaron fuera.
+
+**Pendiente:** `public/economos-v2.png` ya no se usa. CalcuVolt sigue con su maqueta.
+
+---
+
 ## Comandos útiles
 
 ```powershell

@@ -24,7 +24,7 @@ export function LanguageToggle() {
       aria-label={isEs ? "Switch to English" : "Cambiar a español"}
       className={cn(
         buttonVariants({ variant: "ghost", size: "icon" }),
-        "text-xs font-semibold"
+        "size-11 text-xs font-semibold"
       )}
     >
       {isEs ? "EN" : "ES"}

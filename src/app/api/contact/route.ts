@@ -9,21 +9,46 @@ function escapeHtml(text: string): string {
     .replace(/'/g, "&#39;")
 }
 
+const MAX_NAME = 100
+const MAX_EMAIL = 254
+const MAX_MESSAGE = 5000
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const clean = (value: unknown) => (typeof value === "string" ? value.trim() : "")
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { name, email, message, consent } = body as {
-      name?: string
-      email?: string
-      message?: string
+    const { consent, website } = body as {
       consent?: unknown
+      website?: unknown
     }
+
+    // Campo trampa: solo un bot lo rellena. Se responde exito sin enviar nada,
+    // para que no sepa que fue detectado.
+    if (website) {
+      return NextResponse.json({ success: true })
+    }
+
+    // Los saltos de linea del nombre se quitan porque va en el asunto del correo.
+    const name = clean(body.name).replace(/[\r\n]+/g, " ")
+    const email = clean(body.email)
+    const message = clean(body.message)
 
     if (!name || !email || !message) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
       )
+    }
+
+    if (
+      name.length > MAX_NAME ||
+      email.length > MAX_EMAIL ||
+      message.length > MAX_MESSAGE ||
+      !EMAIL_PATTERN.test(email)
+    ) {
+      return NextResponse.json({ error: "Invalid fields" }, { status: 400 })
     }
 
     if (consent !== true) {
@@ -56,6 +81,7 @@ export async function POST(request: Request) {
     const { error } = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
       to: "manuelk211995@gmail.com",
+      replyTo: email,
       subject: `Portfolio Contact — ${escapeHtml(name)}`,
       html: `
         <h2>New message from portfolio</h2>

@@ -27,16 +27,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     "skills.tools.name": "Tools",
 
     "projects.title": "Projects",
-    "projects.indexLabel": "Index",
-    "projects.view": "View project",
     "projects.economos.desc": "Personal financial control panel with real-time asset tracking, automated trading signals, AI assistant powered by Google Gemini, and multi-bank management.",
     "projects.calcuvolt.desc": "Professional electrical calculation app with support for NEC and REBT standards. Calculates conductor gauge, voltage drop, and short circuit. PWA with dark mode, JWT authentication, and PDF reports by email.",
-    "projects.portfolio.desc": "Modern portfolio built with Next.js 16 and React 19, featuring dark/light mode, i18n, and smooth scroll animations.",
     "projects.volleyplan.desc": "Web tool for volleyball coaches that condenses the game plan into a single printable A4 sheet: tactical board with tokens and arrows, rival and team notes, and PDF export. Built by an FIVB coach.",
     "projects.code": "Code",
     "projects.demo": "Demo",
 
-    "contact.title": "Contact",
     "contact.letsTalk": "Let's Talk",
     "contact.desc": "I'm open to collaborations, job opportunities, and freelance projects. Feel free to reach out.",
     "contact.namePlaceholder": "Your name",
@@ -82,16 +78,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     "skills.tools.name": "Herramientas",
 
     "projects.title": "Proyectos",
-    "projects.indexLabel": "Índice",
-    "projects.view": "Ver proyecto",
     "projects.economos.desc": "Panel de control financiero personal con seguimiento de activos en tiempo real, señales de trading automatizadas, asistente IA con Google Gemini y gestión multibanco.",
     "projects.calcuvolt.desc": "Aplicación de cálculo eléctrico profesional con soporte para normativas NEC y REBT. Calcula calibre de conductores, caída de tensión y cortocircuito. PWA con modo oscuro, autenticación JWT y reportes PDF por correo.",
-    "projects.portfolio.desc": "Portfolio moderno construido con Next.js 16 y React 19, con modo oscuro/claro, i18n y animaciones de scroll suaves.",
     "projects.volleyplan.desc": "Herramienta web para entrenadores de voleibol que condensa el plan de juego en una sola hoja A4 imprimible: pizarra táctica con fichas y flechas, notas de rival y equipo, y exportación a PDF. Hecha por un entrenador FIVB.",
     "projects.code": "Código",
     "projects.demo": "Demo",
 
-    "contact.title": "Contacto",
     "contact.letsTalk": "Hablemos",
     "contact.desc": "Estoy abierto a colaboraciones, oportunidades laborales y proyectos freelance. No dudes en contactarme.",
     "contact.namePlaceholder": "Tu nombre",

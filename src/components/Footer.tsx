@@ -8,19 +8,19 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="field-petrol border-t border-border">
-      <div className="mx-auto max-w-6xl px-6 py-8">
-        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-          <p className="font-mono text-xs uppercase tracking-[0.15em] text-muted-foreground">
-            © {year} Manuel Pernia — {t("footer.rights")}
+    <footer>
+      <div className="mx-auto max-w-[1360px] px-6 py-6">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <p>
+            © {year} Manuel Pernia. {t("footer.rights")}
           </p>
 
           <nav aria-label="Legal">
-            <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
+            <ul className="flex flex-wrap items-center gap-x-6 gap-y-1">
               <li>
                 <a
                   href={localePath(language, "/privacidad")}
-                  className="transition-colors hover:text-foreground"
+                  className="inline-block py-2 underline-offset-4 hover:underline"
                 >
                   {t("footer.privacy")}
                 </a>
@@ -28,7 +28,7 @@ export function Footer() {
               <li>
                 <a
                   href={localePath(language, "/cookies")}
-                  className="transition-colors hover:text-foreground"
+                  className="inline-block py-2 underline-offset-4 hover:underline"
                 >
                   {t("footer.cookies")}
                 </a>
@@ -36,7 +36,7 @@ export function Footer() {
               <li>
                 <a
                   href={`${localePath(language, "/")}#hero`}
-                  className="transition-colors hover:text-foreground"
+                  className="inline-block py-2 underline-offset-4 hover:underline"
                 >
                   ↑ {t("nav.home")}
                 </a>

@@ -10,7 +10,7 @@ const palette = {
   petrol: "#17313C",
   paper: "#f4f1e8",
   muted: "#b7c5c7",
-  orange: "#C35929",
+  orange: "#e8743b",
 }
 
 export function renderOgImage(lang: Locale = "en") {
@@ -32,7 +32,7 @@ export function renderOgImage(lang: Locale = "en") {
             width: "100%",
             height: "12px",
             background:
-              "linear-gradient(90deg,#254E72 0%,#206E82 35%,#A45230 70%,#C35929 100%)",
+              "linear-gradient(90deg,#254E72 0%,#206E82 35%,#A45230 70%,#e8743b 100%)",
           }}
         />
         <div

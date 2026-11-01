@@ -3,13 +3,15 @@
 import { useEffect, useRef, useState } from "react"
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)"
-const THRESHOLD = 0.15
+const FALLBACK_MS = 5000
 
 /**
  * Muestra el contenido al entrar en pantalla (una sola vez).
  * Con prefers-reduced-motion no hay nada que animar: se marca visible en el
  * primer frame, sin observer. El setState va en un rAF a proposit, para no
  * encadenar un render sincrono dentro del effect (react-hooks/set-state-in-effect).
+ * Sin threshold para que funcione con bloques de cualquier altura, y con un
+ * temporizador de seguridad: el contenido nunca depende solo del observer.
  */
 export function useReveal() {
   const ref = useRef<HTMLDivElement>(null)
@@ -34,10 +36,14 @@ export function useReveal() {
           observer.disconnect()
         }
       },
-      { threshold: THRESHOLD }
+      { rootMargin: "0px 0px -10% 0px" }
     )
     observer.observe(el)
-    return () => observer.disconnect()
+    const fallback = setTimeout(() => setIsVisible(true), FALLBACK_MS)
+    return () => {
+      observer.disconnect()
+      clearTimeout(fallback)
+    }
   }, [])
 
   return { ref, isVisible }

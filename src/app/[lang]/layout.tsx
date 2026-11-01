@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import { notFound } from "next/navigation"
-import { Geist, Geist_Mono, Instrument_Serif, Instrument_Sans } from "next/font/google"
+import { Archivo } from "next/font/google"
 import { Providers } from "@/components/providers"
 import { Header } from "@/components/Header"
 import { Footer } from "@/components/Footer"
@@ -25,29 +25,10 @@ import {
 
 import "../globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
-
-const editorialSerif = Instrument_Serif({
-  variable: "--font-editorial",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  display: "swap",
-})
-
-const instrumentSans = Instrument_Sans({
+const archivo = Archivo({
   variable: "--font-sans-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  axes: ["wdth"],
   display: "swap",
 })
 
@@ -198,8 +179,14 @@ export default async function LangLayout({
     <html
       lang={lang}
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${editorialSerif.variable} ${instrumentSans.variable}`}
+      className={archivo.variable}
     >
+      <head>
+        {/* Sin JavaScript las secciones se muestran igual, sin animacion. */}
+        <noscript>
+          <style>{`.reveal{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
+      </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <a
           href="#main-content"

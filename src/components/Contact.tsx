@@ -7,10 +7,11 @@ import { useI18n } from "./LanguageProvider"
 import { useReveal } from "@/lib/useReveal"
 import { localePath } from "@/lib/site"
 
-// Inputs editoriales: solo linea inferior. Estados sin color (B/N):
-// el significado lo carga el texto, el peso y la regla, no el tono.
+// Campos con etiqueta visible. Fondo y texto fijos: el campo blanco se lee igual
+// sobre papel o petroleo, segun el tema.
+const labelClassName = "mb-1.5 block font-semibold"
 const fieldClassName =
-  "w-full border-b border-input bg-transparent px-0 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-foreground"
+  "w-full rounded-none border border-foreground bg-white p-3 text-[#17313c] caret-[#17313c] outline-none transition-shadow focus:ring-2 focus:ring-[var(--pal-orange)]"
 
 export function Contact() {
   const [status, setStatus] = useState<
@@ -43,6 +44,7 @@ export function Contact() {
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
       message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
       consent: true,
+      website: (form.elements.namedItem("website") as HTMLInputElement).value,
     }
 
     try {
@@ -65,144 +67,127 @@ export function Contact() {
   }
 
   return (
-    <section
-      id="contact"
-      className="field-rust relative flex min-h-screen flex-col justify-center overflow-hidden px-6 py-24 snap-start"
-    >
-      <span className="overprint absolute inset-x-0 top-0" aria-hidden="true" />
+    <section id="contact" className="field-contrast px-6">
       <div
         ref={ref}
-        className={`mx-auto w-full max-w-6xl reveal-scale ${isVisible ? "visible" : ""}`}
+        className={`reveal mx-auto flex w-full max-w-[1360px] flex-wrap gap-x-24 gap-y-12 py-26 ${isVisible ? "visible" : ""}`}
       >
-        <div className="mb-10 border-b border-border pb-5">
-          <h2 className="font-display text-4xl md:text-5xl">
-            {t("contact.title")}
+        <div className="max-w-[600px] flex-[1_1_420px]">
+          <h2 className="type-display mb-6 text-[clamp(2.75rem,6vw,5.5rem)]">
+            {t("contact.letsTalk")}
           </h2>
+          <p className="mb-8 text-xl leading-relaxed">{t("contact.desc")}</p>
+          <a
+            href="mailto:manuelk211995@gmail.com"
+            className="mb-1 inline-block py-2 font-semibold underline underline-offset-4 hover:opacity-80"
+          >
+            manuelk211995@gmail.com
+          </a>
+          <p>Granada, España</p>
         </div>
 
-        <div className="grid gap-16 md:grid-cols-2">
+        <form onSubmit={handleSubmit} className="flex flex-[1_1_420px] flex-col gap-5">
           <div>
-            <h3 className="mb-4 text-2xl font-semibold">
-              {t("contact.letsTalk")}
-            </h3>
-            <p className="mb-7 max-w-md text-muted-foreground">
-              {t("contact.desc")}
-            </p>
-            <div className="mb-4 flex items-center gap-3 text-muted-foreground">
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="size-5 shrink-0 text-foreground"
-                aria-hidden="true"
-              >
-                <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-              </svg>
-              <span className="text-sm">manuelk211995@gmail.com</span>
-            </div>
-            <div className="flex items-center gap-3 text-muted-foreground">
-              <svg
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="size-5 shrink-0 text-foreground"
-                aria-hidden="true"
-              >
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-              </svg>
-              <span className="text-sm">Granada, España</span>
-            </div>
+            <label htmlFor="name" className={labelClassName}>
+              {t("contact.namePlaceholder")}
+            </label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              maxLength={100}
+              required
+              className={fieldClassName}
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            <div>
-              <label htmlFor="name" className="sr-only">
-                {t("contact.namePlaceholder")}
-              </label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                placeholder={t("contact.namePlaceholder")}
-                required
-                className={fieldClassName}
-              />
-            </div>
+          <div>
+            <label htmlFor="email" className={labelClassName}>
+              {t("contact.emailPlaceholder")}
+            </label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              maxLength={254}
+              required
+              className={fieldClassName}
+            />
+          </div>
 
-            <div>
-              <label htmlFor="email" className="sr-only">
-                {t("contact.emailPlaceholder")}
-              </label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                placeholder={t("contact.emailPlaceholder")}
-                required
-                className={fieldClassName}
-              />
-            </div>
+          <div>
+            <label htmlFor="message" className={labelClassName}>
+              {t("contact.messagePlaceholder")}
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows={4}
+              maxLength={5000}
+              required
+              className={`${fieldClassName} resize-y`}
+            />
+          </div>
 
-            <div>
-              <label htmlFor="message" className="sr-only">
-                {t("contact.messagePlaceholder")}
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                placeholder={t("contact.messagePlaceholder")}
-                required
-                className={`${fieldClassName} resize-y`}
-              />
-            </div>
+          {/* Campo trampa para bots: fuera de la vista y del orden de tabulacion. */}
+          <div aria-hidden="true" className="absolute -left-[9999px]">
+            <label htmlFor="website">Website</label>
+            <input
+              id="website"
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
 
-            <div className="flex items-start gap-2 text-sm text-muted-foreground">
-              <input
-                id="consent"
-                type="checkbox"
-                name="consent"
-                checked={consent}
-                onChange={handleConsentChange}
-                aria-required="true"
-                className="mt-1 size-4 shrink-0 cursor-pointer rounded-none border-input accent-[var(--pal-orange)]"
-              />
-              <label htmlFor="consent" className="leading-5">
-                {t("contact.consent")}{" "}
-                <Link
-                  href={localePath(language, "/privacidad")}
-                  className="underline underline-offset-4 hover:opacity-80"
-                >
-                  {t("contact.consentLink")}
-                </Link>
-              </label>
-            </div>
+          <div className="flex items-start gap-3">
+            <input
+              id="consent"
+              type="checkbox"
+              name="consent"
+              checked={consent}
+              onChange={handleConsentChange}
+              aria-required="true"
+              className="mt-0.5 size-5 shrink-0 cursor-pointer rounded-none accent-[var(--pal-orange)]"
+            />
+            <label htmlFor="consent">
+              {t("contact.consent")}{" "}
+              <Link
+                href={localePath(language, "/privacidad")}
+                className="underline underline-offset-4 hover:opacity-80"
+              >
+                {t("contact.consentLink")}
+              </Link>
+            </label>
+          </div>
 
-            <div aria-live="polite" className="min-h-[1.25rem] text-sm">
-              {status === "mustAccept" && (
-                <p className="font-semibold text-foreground">
-                  {t("contact.mustAccept")}
-                </p>
-              )}
-              {status === "error" && (
-                <p className="font-semibold text-foreground">
-                  {t("contact.error")}
-                </p>
-              )}
-              {status === "success" && (
-                <p className="font-medium text-accent-ink">
-                  {t("contact.sent")}
-                </p>
-              )}
-            </div>
+          <div aria-live="polite" className="min-h-[1.25rem]">
+            {status === "mustAccept" && (
+              <p className="font-semibold text-foreground">
+                {t("contact.mustAccept")}
+              </p>
+            )}
+            {status === "error" && (
+              <p className="font-semibold text-foreground">
+                {t("contact.error")}
+              </p>
+            )}
+            {status === "success" && (
+              <p className="font-semibold text-accent-ink">
+                {t("contact.sent")}
+              </p>
+            )}
+          </div>
 
-            <Button
-              type="submit"
-              disabled={status === "loading"}
-              className="w-full py-6 text-sm font-semibold"
-            >
-              {status === "loading" ? t("contact.sending") : t("contact.send")}
-            </Button>
-          </form>
-        </div>
+          <Button
+            type="submit"
+            disabled={status === "loading"}
+            className="btn-lift h-auto self-start px-7 py-4 text-base font-bold"
+          >
+            {status === "loading" ? t("contact.sending") : t("contact.send")}
+          </Button>
+        </form>
       </div>
     </section>
   )
