@@ -184,7 +184,11 @@ function DemoDialog({
         className="field-paper w-full max-w-4xl border border-border shadow-2xl shadow-black/20 outline-none"
       >
         <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-3 md:px-7">
-          <h3 id="demo-dialog-title" className="type-display text-2xl md:text-3xl">
+          <h3
+            id="demo-dialog-title"
+            translate="no"
+            className="type-display text-2xl md:text-3xl"
+          >
             {project.title}
           </h3>
           <button
@@ -247,7 +251,9 @@ function ProjectRow({
           <p className="mt-6 mb-1 font-bold text-accent-ink">
             {String(index + 1).padStart(2, "0")}
           </p>
-          <h3 className="type-display mb-4 text-[2.75rem]">{project.title}</h3>
+          <h3 translate="no" className="type-display mb-4 text-[2.75rem]">
+            {project.title}
+          </h3>
           <p className="mb-4 text-lg leading-relaxed">{t(project.descKey)}</p>
           <p className="mb-4 font-semibold">{project.tags.join(" · ")}</p>
 

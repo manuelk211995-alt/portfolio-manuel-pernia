@@ -794,7 +794,21 @@ Contraste calculado: acento sobre petróleo 4.54:1, negro sobre acento 6.59:1, p
 
 **Verificación:** `tsc`, `lint`, `build` e `impeccable detect src/` ✅. A 1440 px: tarjetas de 518 px y la tercera asomando; las flechas se desactivan bien en cada extremo. A 375 px: tarjeta de 278 px con la siguiente asomando. Sin desborde de página y sin errores en consola.
 
-**Sin verificar (ventana sin dibujar):** el desplazamiento suave al pulsar las flechas y el deslizamiento táctil.
+**Sin verificar (ventana sin dibujar):** el desplazamiento suave al pulsar las flechas y el deslizamiento táctil. El usuario lo probó en local y aprobó subirlo.
+
+**Despliegue:** `13ac959` (Nivel 60) y `e8bf7f3` (carrusel y portada) en producción; `/` y `/es` sirven el carrusel, las flechas y el enlace a nivel60.com.
+
+---
+
+## 36. "VolleyPlan" aparecía como "Plan de volea"
+
+**Síntoma:** el usuario vio el proyecto de voleibol titulado "Plan de volea".
+
+**Causa:** el código no contiene ese texto; es la traducción automática del navegador, que traduce nombres de producto. Pasa sobre todo en la versión inglesa (`/`) con el traductor de Chrome activo.
+
+**Solución:** `translate="no"` en el título de cada proyecto y en el del diálogo de demo (`Projects.tsx`). Los traductores (Chrome, Edge, Google Translate) respetan ese atributo.
+
+**Verificación:** `tsc` y `lint` ✅; el HTML de `/es` sirve los 4 títulos con `translate="no"`. No comprobado con el traductor activado.
 
 ---
 
