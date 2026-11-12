@@ -12,9 +12,21 @@ type Project = {
   codeUrl?: string
   images: string[]
   demoUrl?: string
+  liveUrl?: string
 }
 
 const projects: Project[] = [
+  {
+    title: "Nivel 60",
+    descKey: "projects.nivel60.desc",
+    tags: ["Astro", "MDX", "JavaScript", "Pagefind", "Blizzard API", "Vercel"],
+    images: [
+      "/nivel60-portada.jpg",
+      "/nivel60-clase.jpg",
+      "/nivel60-calculadora.jpg",
+    ],
+    liveUrl: "https://nivel60.com",
+  },
   {
     title: "Economos",
     descKey: "projects.economos.desc",
@@ -236,8 +248,18 @@ function ProjectRow({
           <p className="mb-4 text-lg leading-relaxed">{t(project.descKey)}</p>
           <p className="mb-4 font-semibold">{project.tags.join(" · ")}</p>
 
-          {(project.demoUrl || project.codeUrl) && (
+          {(project.liveUrl || project.demoUrl || project.codeUrl) && (
             <div className="mt-auto flex flex-wrap gap-x-6 gap-y-1 font-bold">
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-3"
+                >
+                  <span className="link-draw">{t("projects.live")}</span>
+                </a>
+              )}
               {project.demoUrl && (
                 <button
                   type="button"
