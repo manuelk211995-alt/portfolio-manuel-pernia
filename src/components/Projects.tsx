@@ -72,7 +72,7 @@ function ProjectGallery({ images, alt }: { images: string[]; alt: string }) {
           src={src}
           alt={images.length > 1 ? `${alt} ${i + 1}` : alt}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1360px) 50vw, 432px"
+          sizes="(max-width: 768px) 85vw, (max-width: 1024px) 60vw, 520px"
           className={`object-cover object-top transition-[opacity,scale] duration-700 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100 ${i === active ? "opacity-100" : "opacity-0"}`}
         />
       ))}
@@ -231,11 +231,14 @@ function ProjectRow({
   const { ref, isVisible } = useReveal()
 
   return (
-    <li>
-      {/* Entrada escalonada: las columnas de una misma fila aparecen en orden. */}
+    // Ancho fijo por tarjeta: se ven 1, 1.5 o 2.5 segun la pantalla, y la que
+    // asoma indica que el carrusel continua.
+    <li className="shrink-0 basis-[85%] snap-start md:basis-[calc((100%_-_2rem)/1.5)] lg:basis-[calc((100%_-_4rem)/2.5)]">
+      {/* Entrada escalonada solo para las que se ven al llegar; el resto entra
+          sin espera al deslizar. */}
       <div
         ref={ref}
-        style={{ transitionDelay: `${index * 180}ms` }}
+        style={{ transitionDelay: `${index < 3 ? index * 180 : 0}ms` }}
         className={`reveal h-full ${isVisible ? "visible" : ""}`}
       >
         <article className="group flex h-full min-w-0 flex-col">
@@ -287,19 +290,87 @@ function ProjectRow({
   )
 }
 
+const arrowClassName =
+  "flex size-11 cursor-pointer items-center justify-center rounded-[2px] border border-foreground transition-colors hover:bg-foreground hover:text-background disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-transparent disabled:hover:text-foreground"
+
 export function Projects() {
   const [demo, setDemo] = useState<Project | null>(null)
+  const [edges, setEdges] = useState({ start: true, end: false })
+  const listRef = useRef<HTMLOListElement>(null)
   const { t } = useI18n()
 
   const closeDialog = useCallback(() => setDemo(null), [])
 
+  // Las flechas se desactivan en los extremos. El ResizeObserver da la primera
+  // medida y la actualiza si cambia el ancho de la pantalla.
+  useEffect(() => {
+    const list = listRef.current
+    if (!list) return
+    const update = () => {
+      const max = list.scrollWidth - list.clientWidth
+      setEdges({ start: list.scrollLeft <= 4, end: list.scrollLeft >= max - 4 })
+    }
+    list.addEventListener("scroll", update, { passive: true })
+    const observer = new ResizeObserver(update)
+    observer.observe(list)
+    return () => {
+      list.removeEventListener("scroll", update)
+      observer.disconnect()
+    }
+  }, [])
+
+  const scrollByCard = (direction: 1 | -1) => {
+    const list = listRef.current
+    const card = list?.querySelector("li")
+    if (!list || !card) return
+    const gap = parseFloat(getComputedStyle(list).columnGap) || 0
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    list.scrollBy({
+      left: direction * (card.getBoundingClientRect().width + gap),
+      behavior: reduced ? "auto" : "smooth",
+    })
+  }
+
   return (
     <section id="projects" className="field-teal px-6">
       <div className="mx-auto max-w-[1360px] py-24">
-        <h2 className="type-display mb-14 text-[clamp(2.75rem,6vw,5.5rem)]">
-          {t("projects.title")}
-        </h2>
-        <ol className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))] gap-x-8 gap-y-14">
+        <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
+          <h2 className="type-display text-[clamp(2.75rem,6vw,5.5rem)]">
+            {t("projects.title")}
+          </h2>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => scrollByCard(-1)}
+              disabled={edges.start}
+              aria-label={t("projects.prev")}
+              aria-controls="projects-list"
+              className={arrowClassName}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5" aria-hidden="true">
+                <path d="M15 6l-6 6 6 6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollByCard(1)}
+              disabled={edges.end}
+              aria-label={t("projects.next")}
+              aria-controls="projects-list"
+              className={arrowClassName}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        {/* -mx-2/px-2 deja sitio al anillo de foco dentro del area con scroll. */}
+        <ol
+          id="projects-list"
+          ref={listRef}
+          className="no-scrollbar -mx-2 flex snap-x snap-mandatory scroll-px-2 gap-8 overflow-x-auto px-2 pb-2"
+        >
           {projects.map((project, i) => (
             <ProjectRow
               key={project.title}

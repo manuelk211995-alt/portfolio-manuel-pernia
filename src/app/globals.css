@@ -191,6 +191,14 @@
   line-height: 1;
 }
 
+/* Carrusel: sin barra visible; se navega deslizando, con flechas o teclado. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 ::selection {
   background: var(--pal-orange);
   color: var(--pal-ink-strong);

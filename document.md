@@ -759,7 +759,7 @@ Contraste calculado: acento sobre petróleo 4.54:1, negro sobre acento 6.59:1, p
 - **Causa confirmada por el usuario:** los correos están en spam de Gmail.
 - **Solución:** registros DKIM, SPF y DMARC añadidos en Porkbun y comprobados públicamente; el usuario confirmó el dominio verificado en Resend. El remitente pasa a `Portfolio Contact <contacto@manuelpernia.dev>`. No hace falta buzón: las respuestas van por `replyTo`.
 - **Contratiempo:** la traducción automática del navegador rompió el panel de Resend (`removeChild`) y mostró `p=ninguno` en Porkbun; el valor real era `p=none`.
-- **Pendiente:** desplegar y confirmar con un envío real que llega a la bandeja de entrada.
+- **Resultado:** desplegado en `2dcad5a`; el usuario confirmó que quedó solucionado tras probarlo.
 - **Casilla de privacidad:** aparecía oscura sin marcar por el tema oscuro sobre fondo claro; `.field-contrast` ahora fija su `color-scheme`.
 
 **B. La animación de Proyectos no se veía**
@@ -769,6 +769,32 @@ Contraste calculado: acento sobre petróleo 4.54:1, negro sobre acento 6.59:1, p
 **Verificación:** `tsc`, `lint`, `build` e `impeccable detect src/` ✅. Con `next start` y clave de prueba: mensaje válido → 501; `hp_token` → 200 sin envío. En el navegador, a más de 5 s y sin scroll, ninguna de las 5 secciones se revela sola, página hidratada.
 
 **Sin verificar:** la entrada en movimiento (ventana sin dibujar) y el envío real.
+
+---
+
+## 34. Proyecto Nivel 60 (web de WoW Forever)
+
+**Estado:** el commit local `13ac959` (12 nov 2026, sin subir) añade "Nivel 60" como primer proyecto, con enlace a `https://nivel60.com`. Incluye el campo `liveUrl` y el texto "Ver web"/"Visit site" (`projects.live`), descripciones EN/ES y 3 capturas 1200×800 en `public/nivel60-*.jpg`. Se hizo fuera de esta sesión; aquí solo se revisó.
+
+**Verificación:** `nivel60.com` responde 200 · `tsc`, `lint` y `build` ✅ · el HTML de `/es` incluye el proyecto y el enlace con `target="_blank" rel="noopener noreferrer"` · las capturas no muestran datos personales.
+
+**Portada actualizada:** captura nueva del usuario con "Ya está disponible". Se recortó a 3:2 dejando completos el bloque principal y el panel de lanzamiento, con relleno inferior del color de fondo de la web (`#111518`). Mismo nombre de archivo: la anterior nunca se publicó, así que no hay caché que romper.
+
+**Contratiempo:** `sharp` aplica `resize` antes que `extend` aunque se encadenen en otro orden, y el primer intento recortó los lados. Solución: dos pasos (extraer y rellenar a un buffer, luego redimensionar).
+
+## 35. Proyectos en carrusel horizontal
+
+**Petición:** que el número de proyectos no descuadre la cuadrícula (con 4 quedaba uno solo en la segunda fila).
+
+**Cambio (`Projects.tsx`):**
+- Fila con `overflow-x-auto` y `scroll-snap` obligatorio; tarjetas de ancho fijo: 85 % en móvil, 1,5 visibles en `md` y 2,5 en `lg`. La que asoma indica que hay más.
+- Flechas anterior/siguiente (44 px, `aria-controls`, `projects.prev`/`projects.next` en EN/ES), que se desactivan en los extremos. Estado medido con evento `scroll` + `ResizeObserver`.
+- Sin barra de scroll (`.no-scrollbar`), sin avance automático, desplazamiento instantáneo con movimiento reducido.
+- Entrada escalonada solo en las 3 primeras tarjetas; el resto entra sin retraso al deslizar.
+
+**Verificación:** `tsc`, `lint`, `build` e `impeccable detect src/` ✅. A 1440 px: tarjetas de 518 px y la tercera asomando; las flechas se desactivan bien en cada extremo. A 375 px: tarjeta de 278 px con la siguiente asomando. Sin desborde de página y sin errores en consola.
+
+**Sin verificar (ventana sin dibujar):** el desplazamiento suave al pulsar las flechas y el deslizamiento táctil.
 
 ---
 
