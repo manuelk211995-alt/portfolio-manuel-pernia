@@ -55,3 +55,6 @@ dev.log
 .claude/
 
 .claude/settings.local.json
+
+# capturas de revision de impeccable (locales)
+/.impeccable/review/

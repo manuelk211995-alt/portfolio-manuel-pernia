@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState, useCallback, useRef } from "react"
-import { ThemeToggle } from "./ThemeToggle"
 import { LanguageToggle } from "./LanguageToggle"
 import { useI18n } from "./LanguageProvider"
 import { localePath } from "@/lib/site"
@@ -109,15 +108,15 @@ export function Header() {
   return (
     <header
       ref={headerRef}
-      className={`fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/85 backdrop-blur-md transition-shadow duration-300 ${scrolled ? "shadow-lg shadow-black/5" : ""}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${scrolled ? "bg-[#06050a]/92 shadow-[0_2px_0_#1d1b25]" : "bg-transparent"}`}
     >
       <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-6 px-6 py-3">
         <a
           href={`${localePath(language, "/")}#hero`}
           onClick={closeMenu}
-          className="py-2 font-extrabold [font-stretch:125%]"
+          className="font-pixel py-2 text-xl text-[#efe6d4]"
         >
-          M. Pernia
+          M. PERNIA
         </a>
         <div className="flex items-center gap-4 md:gap-7">
           <nav
@@ -137,10 +136,10 @@ export function Header() {
                       href={`${localePath(language, "/")}${link.href}`}
                       onClick={closeMenu}
                       aria-current={isActive ? "page" : undefined}
-                      className={`relative transition-colors after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-foreground after:transition-all ${
+                      className={`font-label relative text-sm transition-colors after:absolute after:bottom-[-6px] after:left-0 after:h-[3px] after:bg-[#e0543f] after:transition-all ${
                         isActive
-                          ? "text-foreground font-semibold after:w-full"
-                          : "text-muted-foreground hover:text-foreground after:w-0 hover:after:w-full"
+                          ? "text-[#efe6d4] after:w-full"
+                          : "text-[#cfc7dd] hover:text-[#efe6d4] after:w-0 hover:after:w-full"
                       }`}
                     >
                       {t(link.key)}
@@ -152,7 +151,6 @@ export function Header() {
           </nav>
           <div className="flex items-center gap-2">
             <LanguageToggle />
-            <ThemeToggle />
           </div>
           <button
             ref={toggleRef}

@@ -14,13 +14,13 @@ export const localeMeta: Record<
   en: {
     title: "Manuel Pernia | Full Stack Developer",
     description:
-      "Manuel Pernia — Full Stack Developer building modern, scalable web apps with React, Next.js, Node.js, Python and Flask. Projects, skills and contact.",
+      "Full Stack Developer in Granada. I build tools for real trades: electrical calculations, volleyball game plans and web apps with React, Python and Node.js.",
     ogLocale: "en_US",
   },
   es: {
     title: "Manuel Pernia | Desarrollador Full Stack",
     description:
-      "Manuel Pernia — Desarrollador Full Stack. Construyo aplicaciones web modernas y escalables con React, Next.js, Node.js, Python y Flask. Proyectos, habilidades y contacto.",
+      "Desarrollador Full Stack en Granada. Creo herramientas para oficios reales: cálculos eléctricos, planes de voleibol y apps web con React, Python y Node.js.",
     ogLocale: "es_ES",
   },
 }
@@ -39,6 +39,12 @@ export const keywords = [
   "Flask",
   "TypeScript",
   "web developer portfolio",
+  "desarrollador web Granada",
+  "Full Stack Developer Granada",
+  "electrical calculation app",
+  "app cálculos eléctricos REBT",
+  "volleyball game plan app",
+  "app voleibol entrenadores",
 ]
 
 export const social = {
@@ -62,6 +68,10 @@ export const knowsAbout = [
   "TypeScript",
   "SQL",
   "Docker",
+  "Electrical engineering",
+  "REBT",
+  "NEC",
+  "Volleyball coaching",
 ]
 
 export function localePath(lang: Locale, path: string): string {

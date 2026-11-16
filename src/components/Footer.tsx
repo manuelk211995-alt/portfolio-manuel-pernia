@@ -2,13 +2,14 @@
 
 import { useI18n } from "./LanguageProvider"
 import { localePath } from "@/lib/site"
+import { PixelArrow } from "./castle/PixelArt"
 
 export function Footer() {
   const { t, language } = useI18n()
   const year = new Date().getFullYear()
 
   return (
-    <footer>
+    <footer className="bg-[#06050a] text-[#b9b0c8] shadow-[0_-3px_0_#1d1b25]">
       <div className="mx-auto max-w-[1360px] px-6 py-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <p>
@@ -38,7 +39,8 @@ export function Footer() {
                   href={`${localePath(language, "/")}#hero`}
                   className="inline-block py-2 underline-offset-4 hover:underline"
                 >
-                  ↑ {t("nav.home")}
+                  <PixelArrow up className="mr-1.5 inline-block h-[0.8em] align-[-0.05em]" />
+                  {t("nav.home")}
                 </a>
               </li>
             </ul>

@@ -55,7 +55,7 @@ export function CookieBanner() {
   }
 
   return (
-    <div className="field-petrol fixed bottom-0 left-0 right-0 z-50 border-t border-border px-4 py-4 shadow-lg shadow-black/5">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#0d0b14] px-4 py-4 shadow-[0_-3px_0_#24222d]">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <p className="text-sm text-muted-foreground">
           {t("cookies.banner.text")}

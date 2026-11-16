@@ -2,16 +2,13 @@
 
 import Link from "next/link"
 import { useState, FormEvent, ChangeEvent } from "react"
-import { Button } from "@/components/ui/button"
 import { useI18n } from "./LanguageProvider"
-import { useReveal } from "@/lib/useReveal"
-import { localePath } from "@/lib/site"
+import { localePath, social } from "@/lib/site"
 
-// Campos con etiqueta visible. Fondo y texto fijos: el campo blanco se lee igual
-// sobre papel o petroleo, segun el tema.
-const labelClassName = "mb-1.5 block font-semibold"
+// Campos del tablón: hueco oscuro con marco de hierro; el foco lo enciende en rojo.
+const labelClassName = "font-label mb-2 block text-xs text-[#cfc7dd]"
 const fieldClassName =
-  "w-full rounded-none border border-foreground bg-white p-3 text-[#17313c] caret-[#17313c] outline-none transition-shadow focus:ring-2 focus:ring-[var(--pal-orange)]"
+  "pixel-field w-full rounded-none p-3 text-[#efe6d4] outline-none"
 
 export function Contact() {
   const [status, setStatus] = useState<
@@ -19,7 +16,6 @@ export function Contact() {
   >("idle")
   const [consent, setConsent] = useState(false)
   const { t, language } = useI18n()
-  const { ref, isVisible } = useReveal()
 
   function handleConsentChange(e: ChangeEvent<HTMLInputElement>) {
     setConsent(e.target.checked)
@@ -67,26 +63,36 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="field-contrast px-6">
+    <section id="contact" className="stone-wall px-6 py-24">
       <div
-        ref={ref}
-        className={`reveal mx-auto flex w-full max-w-[1360px] flex-wrap gap-x-24 gap-y-12 py-26 ${isVisible ? "visible" : ""}`}
+        className="wood-board relative mx-auto flex w-full max-w-[1200px] flex-wrap gap-x-16 gap-y-10 p-8 md:p-12"
       >
-        <div className="max-w-[600px] flex-[1_1_420px]">
-          <h2 className="type-display mb-6 text-[clamp(2.75rem,6vw,5.5rem)]">
+        <div className="max-w-[520px] flex-[1_1_380px]">
+          <h2 className="castle-title font-pixel text-[clamp(2.5rem,4.5vw,4rem)] leading-none">
             {t("contact.letsTalk")}
           </h2>
-          <p className="mb-8 text-xl leading-relaxed">{t("contact.desc")}</p>
+          <p className="font-label mt-5 inline-block bg-[#2a0d0b] px-3 py-1.5 text-xs text-[#ff8a72] shadow-[inset_0_0_0_2px_#b3261e]">
+            {t("contact.role")}
+          </p>
+          <p className="mt-6 text-lg leading-relaxed text-[#d9cfbf]">{t("contact.desc")}</p>
           <a
             href="mailto:manuelk211995@gmail.com"
-            className="mb-1 inline-block py-2 font-semibold underline underline-offset-4 hover:opacity-80"
+            className="mt-6 inline-block py-2 font-semibold text-[#efe6d4] underline decoration-[#e0543f] decoration-2 underline-offset-4 hover:text-[#ffb347]"
           >
             manuelk211995@gmail.com
           </a>
-          <p>Granada, España</p>
+          <p className="text-[#d9c8ad]">Granada, España</p>
+          <div className="mt-6 flex flex-wrap gap-4">
+            <a href={social.github} target="_blank" rel="noopener noreferrer" className="plate plate-ghost">
+              GitHub
+            </a>
+            <a href={social.linkedin} target="_blank" rel="noopener noreferrer" className="plate plate-ghost">
+              LinkedIn
+            </a>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-[1_1_420px] flex-col gap-5">
+        <form onSubmit={handleSubmit} className="flex flex-[1_1_380px] flex-col gap-5">
           <div>
             <label htmlFor="name" className={labelClassName}>
               {t("contact.namePlaceholder")}
@@ -152,9 +158,9 @@ export function Contact() {
               checked={consent}
               onChange={handleConsentChange}
               aria-required="true"
-              className="mt-0.5 size-5 shrink-0 cursor-pointer rounded-none accent-[var(--pal-orange)]"
+              className="mt-0.5 size-5 shrink-0 cursor-pointer rounded-none accent-[#b3261e]"
             />
-            <label htmlFor="consent">
+            <label htmlFor="consent" className="text-[#cfc5b4]">
               {t("contact.consent")}{" "}
               <Link
                 href={localePath(language, "/privacidad")}
@@ -167,29 +173,29 @@ export function Contact() {
 
           <div aria-live="polite" className="min-h-[1.25rem]">
             {status === "mustAccept" && (
-              <p className="font-semibold text-foreground">
+              <p className="font-semibold text-[#ff8a72]">
                 {t("contact.mustAccept")}
               </p>
             )}
             {status === "error" && (
-              <p className="font-semibold text-foreground">
+              <p className="font-semibold text-[#ff8a72]">
                 {t("contact.error")}
               </p>
             )}
             {status === "success" && (
-              <p className="font-semibold text-accent-ink">
+              <p className="font-semibold text-[#7be38a]">
                 {t("contact.sent")}
               </p>
             )}
           </div>
 
-          <Button
+          <button
             type="submit"
             disabled={status === "loading"}
-            className="btn-lift h-auto self-start px-7 py-4 text-base font-bold"
+            className="plate plate-primary self-start"
           >
             {status === "loading" ? t("contact.sending") : t("contact.send")}
-          </Button>
+          </button>
         </form>
       </div>
     </section>

@@ -1,19 +1,22 @@
 import { ImageResponse } from "next/og"
 import { siteName, ogSize, type Locale } from "./site"
 
-const subtitles: Record<Locale, string> = {
-  en: "Full Stack Developer",
-  es: "Desarrollador Full Stack",
+const copy: Record<Locale, { role: string; tagline: string }> = {
+  en: { role: "Full Stack Developer", tagline: "Tools for real trades" },
+  es: { role: "Desarrollador Full Stack", tagline: "Herramientas para oficios reales" },
 }
 
-const palette = {
-  petrol: "#17313C",
-  paper: "#f4f1e8",
-  muted: "#b7c5c7",
-  orange: "#e8743b",
-}
+// Sombra en escalón de píxel, igual que los títulos del castillo
+const pixelShadow = "4px 4px 0 #050407, 8px 8px 0 #3a0f0c"
 
-export function renderOgImage(lang: Locale = "en") {
+// La escena del castillo (ya escalada sin suavizado) ocupa todo el fondo;
+// el texto vive en el cielo de la izquierda, como en el héroe de la web.
+export async function renderOgImage(lang: Locale = "en", origin: string) {
+  const scene = await fetch(new URL("/castle/og-scene.png", origin))
+    .then((r) => r.arrayBuffer())
+    .then((buf) => `data:image/png;base64,${Buffer.from(buf).toString("base64")}`)
+  const t = copy[lang]
+
   return new ImageResponse(
     (
       <div
@@ -21,66 +24,87 @@ export function renderOgImage(lang: Locale = "en") {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          background: palette.petrol,
-          padding: "72px",
+          position: "relative",
+          background: "#06050a",
         }}
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={scene}
+          width={1200}
+          height={750}
+          alt=""
+          style={{ position: "absolute", left: 0, top: -90 }}
+        />
         <div
           style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: 720,
+            height: 630,
             display: "flex",
-            width: "100%",
-            height: "12px",
-            background:
-              "linear-gradient(90deg,#254E72 0%,#206E82 35%,#A45230 70%,#e8743b 100%)",
+            background: "linear-gradient(90deg, rgba(6,5,10,0.85) 0%, rgba(6,5,10,0.55) 70%, rgba(6,5,10,0) 100%)",
           }}
         />
         <div
           style={{
+            position: "absolute",
+            left: 64,
+            top: 72,
             display: "flex",
             flexDirection: "column",
-            flex: 1,
-            justifyContent: "center",
           }}
         >
           <div
             style={{
               display: "flex",
-              fontSize: 104,
-              fontWeight: 700,
-              color: palette.paper,
-              letterSpacing: "-0.03em",
+              fontSize: 92,
+              fontWeight: 800,
+              lineHeight: 0.95,
+              textTransform: "uppercase",
+              color: "#efe6d4",
+              textShadow: pixelShadow,
+              flexDirection: "column",
             }}
           >
-            {siteName}
+            {siteName.split(" ").map((w) => (
+              <span key={w}>{w}</span>
+            ))}
           </div>
           <div
             style={{
               display: "flex",
-              fontSize: 40,
-              color: palette.orange,
-              marginTop: 12,
+              marginTop: 28,
+              alignSelf: "flex-start",
+              padding: "8px 16px",
+              fontSize: 30,
+              fontWeight: 700,
+              color: "#ff8a72",
+              background: "#2a0d0b",
+              border: "3px solid #b3261e",
             }}
           >
-            {subtitles[lang]}
+            {t.role}
+          </div>
+          <div style={{ display: "flex", marginTop: 22, fontSize: 34, color: "#f0cf7a" }}>
+            {t.tagline}
           </div>
         </div>
         <div
           style={{
+            position: "absolute",
+            left: 64,
+            bottom: 40,
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
             fontSize: 26,
-            color: palette.muted,
+            color: "#cfc7dd",
           }}
         >
-          <div style={{ display: "flex" }}>manuelpernia.dev</div>
-          <div style={{ display: "flex" }}>
-            React · Next.js · Node.js · Python
-          </div>
+          manuelpernia.dev
         </div>
       </div>
     ),
-    { ...ogSize, headers: { "cache-control": "public, max-age=31536000, immutable" } }
+    { ...ogSize, headers: { "cache-control": "public, max-age=86400" } }
   )
 }

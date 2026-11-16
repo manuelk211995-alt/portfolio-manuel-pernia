@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import { notFound } from "next/navigation"
-import { Archivo } from "next/font/google"
+import { Pixelify_Sans, Schibsted_Grotesk, Silkscreen } from "next/font/google"
 import { Providers } from "@/components/providers"
 import { Header } from "@/components/Header"
 import { Footer } from "@/components/Footer"
@@ -25,18 +25,30 @@ import {
 
 import "../globals.css"
 
-const archivo = Archivo({
+const pixelify = Pixelify_Sans({
+  variable: "--font-pixel",
+  subsets: ["latin"],
+  display: "swap",
+})
+
+const silkscreen = Silkscreen({
+  variable: "--font-label",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+})
+
+const schibsted = Schibsted_Grotesk({
   variable: "--font-sans-body",
   subsets: ["latin"],
-  axes: ["wdth"],
   display: "swap",
 })
 
 export const viewport: Viewport = {
-  colorScheme: "light dark",
+  colorScheme: "dark",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4f1e8" },
-    { media: "(prefers-color-scheme: dark)", color: "#17313c" },
+    { media: "(prefers-color-scheme: light)", color: "#06050a" },
+    { media: "(prefers-color-scheme: dark)", color: "#06050a" },
   ],
 }
 
@@ -143,7 +155,7 @@ function buildJsonLd(locale: Locale) {
         url: absoluteUrl(localePath(locale, "/")),
         name: localeMeta[locale].title,
         isPartOf: { "@id": `${siteUrl}/#website` },
-        about: { "@id": `${siteUrl}/#person` },
+        mainEntity: { "@id": `${siteUrl}/#person` },
         inLanguage,
       },
       {
@@ -153,6 +165,19 @@ function buildJsonLd(locale: Locale) {
         url: siteUrl,
         image: absoluteUrl("/profile.jpeg"),
         jobTitle: locale === "es" ? "Desarrollador Full Stack" : "Full Stack Developer",
+        description: localeMeta[locale].description,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Granada",
+          addressCountry: "ES",
+        },
+        hasCredential: [
+          {
+            "@type": "EducationalOccupationalCredential",
+            name: "Técnico Superior Universitario en Electricidad",
+            credentialCategory: "degree",
+          },
+        ],
         knowsAbout,
         sameAs: [social.github, social.linkedin],
       },
@@ -179,7 +204,7 @@ export default async function LangLayout({
     <html
       lang={lang}
       suppressHydrationWarning
-      className={archivo.variable}
+      className={`${pixelify.variable} ${silkscreen.variable} ${schibsted.variable}`}
     >
       <head>
         {/* Sin JavaScript las secciones se muestran igual, sin animacion. */}

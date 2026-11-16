@@ -1,66 +1,133 @@
 "use client"
 
 import { useI18n } from "./LanguageProvider"
-import { social } from "@/lib/site"
+import { projects } from "@/lib/projects"
+import { PixelArrow, RARITY_COLOR, rarityOf } from "./castle/PixelArt"
 
-// Hero 100% tipografico: el nombre manda. La firma de motion vive en
-// globals.css (hero-mask / hero-fade, keyframes editorial-*).
+// Posición de cada estandarte en la escena (rejilla de 360x225 píxeles).
+const BANNER_X: Record<string, number> = {
+  "nivel-60": 184,
+  economos: 208,
+  calcuvolt: 286,
+  volleyplan: 310,
+}
+const pct = (v: number, total: number) => `${(v / total) * 100}%`
+
 export function Hero() {
   const { t } = useI18n()
 
   return (
-    <section id="hero" className="px-6 pt-36 pb-22">
-      <div className="mx-auto w-full max-w-[1360px]">
-        <h1 className="type-display text-[clamp(3.5rem,11.4vw,11rem)] leading-[0.92] tracking-[-0.03em] text-foreground">
-          <span className="hero-mask">
-            <span className="hero-line" style={{ animationDelay: "0.05s" }}>
-              Manuel Pernia
-            </span>
-          </span>
+    <section id="hero" className="castle-sides relative">
+      {/* En escritorio la escena se limita a la altura de la ventana (8:5 → 160svh de ancho
+          como máximo) para verse entera; los textos se miden en cqw, relativos a ella. */}
+      <div className="@container relative mx-auto lg:w-[min(100%,160svh)]">
+      <div className="relative z-10 px-6 pt-28 pb-10 lg:absolute lg:top-[11.5%] lg:left-[4.4%] lg:w-[40%] lg:p-0">
+        <h1 className="castle-title font-pixel text-[3.25rem] leading-[0.9] uppercase lg:text-[6.6cqw]">
+          Manuel
+          <br />
+          Pernia
         </h1>
-
-        <div className="mt-14 flex flex-wrap items-end justify-between gap-x-16 gap-y-8">
-          <div
-            className="hero-fade max-w-[680px] flex-[1_1_480px]"
-            style={{ animationDelay: "0.35s" }}
-          >
-            <p className="mb-3 text-[1.625rem] leading-tight font-bold text-accent-ink">
-              {t("hero.role")}
-            </p>
-            <p className="text-xl leading-relaxed">{t("hero.desc")}</p>
-          </div>
-
-          <div
-            className="hero-fade flex flex-wrap items-center gap-x-6 gap-y-3"
-            style={{ animationDelay: "0.5s" }}
-          >
-            <a
-              href="#projects"
-              className="btn-lift inline-block rounded-[2px] bg-primary px-7 py-4 font-bold text-primary-foreground hover:bg-primary/85"
-            >
-              {t("hero.viewProjects")}
-            </a>
-            <a href="#contact" className="inline-block py-4 font-bold">
-              <span className="link-draw">{t("hero.getInTouch")}</span>
-            </a>
-            <a
-              href={social.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block py-4"
-            >
-              <span className="link-draw">GitHub</span>
-            </a>
-            <a
-              href={social.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block py-4"
-            >
-              <span className="link-draw">LinkedIn</span>
-            </a>
-          </div>
+        <p className="font-label mt-5 text-xs text-[#e0543f] lg:mt-[1.4cqw] lg:text-[max(0.7rem,1.05cqw)]">
+          {t("hero.tagline")}
+        </p>
+        <p className="mt-2 max-w-[34rem] text-base leading-relaxed text-[#d9cfbf] lg:mt-[0.6cqw] lg:text-[max(0.9rem,1.3cqw)]">
+          {t("hero.desc")}
+        </p>
+        <div className="hero-plates mt-6 flex flex-wrap gap-4 lg:mt-[1.7cqw] lg:flex-nowrap lg:gap-[1.1cqw]">
+          <a href="#projects" className="plate plate-primary">
+            {t("hero.viewProjects")}
+          </a>
+          <a href="#contact" className="plate plate-ghost">
+            {t("hero.getInTouch")}
+          </a>
         </div>
+      </div>
+
+      <div className="castle-frame relative aspect-[8/5] w-full overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/castle/scene.png"
+          alt=""
+          width={360}
+          height={225}
+          className="pixelated absolute inset-0 h-full w-full"
+        />
+        <picture>
+          <source media="(prefers-reduced-motion: reduce)" srcSet="/castle/actors-still.svg" />
+          <img
+            src="/castle/actors.svg"
+            alt=""
+            width={360}
+            height={225}
+            className="absolute inset-0 h-full w-full"
+          />
+        </picture>
+        <div aria-hidden="true" className="castle-bolt pointer-events-none absolute inset-0" />
+        <div aria-hidden="true" className="castle-vignette pointer-events-none absolute inset-0" />
+
+        <ul className="absolute inset-0">
+          {projects.map((project) => {
+            const x = BANNER_X[project.slug]
+            const color = RARITY_COLOR[rarityOf(project.status)]
+            return (
+              <li key={project.slug}>
+                <a
+                  href={`#armory-${project.slug}`}
+                  aria-label={`${t("projects.view")} ${project.title}`}
+                  className="banner-hit absolute"
+                  style={{
+                    left: pct(x - 2, 360),
+                    top: pct(113, 225),
+                    width: pct(24, 360),
+                    height: pct(38, 225),
+                    ["--glow" as string]: color.field,
+                  }}
+                />
+                <span
+                  translate="no"
+                  aria-hidden="true"
+                  className="font-label banner-label absolute hidden -translate-x-1/2 md:block"
+                  style={{
+                    left: pct(x + 10, 360),
+                    top: pct(152, 225),
+                    color: project.status === "live" ? color.text : undefined,
+                    borderColor: project.status === "live" ? color.field : undefined,
+                  }}
+                >
+                  {project.title}
+                </span>
+              </li>
+            )
+          })}
+        </ul>
+        <p
+          className="font-label absolute hidden text-[clamp(0.6rem,0.85cqw,0.8rem)] text-[#b9b0c8] md:block"
+          style={{ left: pct(182, 360), top: pct(163, 225) }}
+        >
+          <PixelArrow className="mr-[0.6em] inline-block h-[0.9em] align-[-0.05em]" />
+          {t("hero.hint")}
+        </p>
+      </div>
+
+      {/* En móvil los estandartes son pequeños: sus nombres van en una fila bajo la escena */}
+      <ul className="flex flex-wrap justify-center gap-2 px-6 pt-5 pb-8 md:hidden">
+        {projects.map((project) => {
+          const color = RARITY_COLOR[rarityOf(project.status)]
+          return (
+            <li key={project.slug}>
+              <a
+                href={`#armory-${project.slug}`}
+                translate="no"
+                className="font-label flex min-h-11 items-center gap-2 bg-[#0a0812] px-3 text-xs text-[#efe6d4]"
+                style={{ boxShadow: `inset 0 0 0 2px ${color.field}` }}
+              >
+                <span aria-hidden="true" className="size-2" style={{ background: color.field }} />
+                {project.title}
+              </a>
+            </li>
+          )
+        })}
+      </ul>
       </div>
     </section>
   )

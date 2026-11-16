@@ -17,196 +17,407 @@
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
-  --color-accent-ink: var(--accent-ink);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
 
-  /* Radios: 0-2px en todo el sistema */
+  /* Pixel art: esquinas rectas en todo el sistema */
   --radius-sm: 0px;
-  --radius-md: 1px;
-  --radius-lg: 2px;
-  --radius-xl: 2px;
-  --radius-2xl: 2px;
-  --radius-3xl: 2px;
-}
-
-:root {
-  /* -------------------------------------------------------------------------
-     PALETA "PETROLEO Y OXIDO" ajustada: petroleo + papel + un acento + teal.
-     El acento (#E8743B) es la tinta de ACCION: botones, foco y seleccion.
-     Como texto solo pasa AA sobre petroleo; sobre papel se usa --accent-ink.
-     Tema claro = papel con la banda teal en un tinte palido.
-  ------------------------------------------------------------------------- */
-  --pal-paper: #f4f1e8;
-  --pal-ink: #17313c;
-  --pal-ink-strong: #0a0a0a;
-  --pal-orange: #e8743b;
-
-  /* Acento legible como TEXTO en cada tema */
-  --accent-ink: #8a4326;
-
-  /* Campos de seccion: par fondo/texto */
-  --field-petrol-bg: #d7dee0;
-  --field-petrol-fg: #17313c;
-  --field-teal-bg: #d3e6e6;
-  --field-teal-fg: #17313c;
-  --field-paper-bg: #fbf9f2;
-  --field-paper-fg: #17313c;
-  /* Seccion invertida respecto al lienzo (Contacto) */
-  --field-contrast-bg: #17313c;
-  --field-contrast-fg: #f4f1e8;
-  --field-contrast-accent: #e8743b;
-
-  --background: var(--pal-paper);
-  --foreground: var(--pal-ink);
-
-  --card: #fbf9f2;
-  --card-foreground: var(--pal-ink);
-  --popover: #fbf9f2;
-  --popover-foreground: var(--pal-ink);
-
-  --primary: var(--pal-orange);
-  --primary-foreground: var(--pal-ink-strong);
-  --secondary: #e7e2d5;
-  --secondary-foreground: var(--pal-ink);
-
-  --muted: #e7e2d5;
-  --muted-foreground: #55606a;
-  --accent: var(--pal-ink);
-  --accent-foreground: var(--pal-paper);
-
-  --destructive: #c23b2a;
-  --border: #b9b3a5;
-  --input: #c7c0b0;
-  --ring: var(--pal-orange);
-
-  --radius: 0.125rem;
-}
-
-.dark {
-  /* Tema oscuro (por defecto): el lienzo es petroleo y nunca negro. */
-  --pal-ink: #0a0a0a;
-
-  --accent-ink: #e8743b;
-
-  --field-petrol-bg: #17313c;
-  --field-petrol-fg: #f4f1e8;
-  --field-teal-bg: #1a5c6e;
-  --field-teal-fg: #f4f1e8;
-  --field-paper-bg: #1e3b46;
-  --field-paper-fg: #f4f1e8;
-  --field-contrast-bg: #f4f1e8;
-  --field-contrast-fg: #17313c;
-  --field-contrast-accent: #8a4326;
-
-  --background: #17313c;
-  --foreground: #f4f1e8;
-
-  --card: #1e3b46;
-  --card-foreground: #f4f1e8;
-  --popover: #1e3b46;
-  --popover-foreground: #f4f1e8;
-
-  --primary: var(--pal-orange);
-  --primary-foreground: var(--pal-ink-strong);
-  --secondary: #1e3b46;
-  --secondary-foreground: #f4f1e8;
-
-  --muted: #1e3b46;
-  --muted-foreground: #b7c5c7;
-  --accent: #f4f1e8;
-  --accent-foreground: #17313c;
-
-  --destructive: #e2554a;
-  --border: #5d7680;
-  --input: #5d7680;
-  --ring: var(--pal-orange);
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
 }
 
 /* ---------------------------------------------------------------------------
-   Campos: cada .field-* remapea los roles semanticos dentro de su alcance, asi
-   los hijos (text-foreground, border-border...) se adaptan sin reescribirse.
+   MUNDO "CASTILLO DE NOCHE" (pixel art). Solo tema oscuro: la escena es de
+   noche y el proveedor fuerza el tema. :root y .dark comparten valores para
+   que las páginas legales y cualquier componente con tokens lo hereden.
 --------------------------------------------------------------------------- */
-.field-petrol,
-.field-teal,
-.field-paper,
-.field-contrast {
-  background-color: var(--f-bg);
-  color: var(--f-fg);
-  caret-color: var(--f-fg);
+:root,
+.dark {
+  --night: #06050a;
+  --stone: #24222d;
+  --stone-dark: #120f19;
+  --iron: #4b505d;
+  --bone: #efe6d4;
+  --ash: #b9b0c8;
+  --blood: #b3261e;
+  --ember: #e0543f;
+  --torch: #ffb347;
 
-  --background: var(--f-bg);
-  --foreground: var(--f-fg);
-  --card: var(--f-bg);
-  --card-foreground: var(--f-fg);
-  --popover: var(--f-bg);
-  --popover-foreground: var(--f-fg);
-  --muted: color-mix(in oklch, var(--f-fg) 12%, var(--f-bg));
-  --muted-foreground: color-mix(in oklch, var(--f-fg) 88%, var(--f-bg));
-  --secondary: color-mix(in oklch, var(--f-fg) 16%, var(--f-bg));
-  --secondary-foreground: var(--f-fg);
-  --accent: var(--f-fg);
-  --accent-foreground: var(--f-bg);
-  --border: color-mix(in oklch, var(--f-fg) 40%, var(--f-bg));
-  --input: color-mix(in oklch, var(--f-fg) 30%, var(--f-bg));
-  --ring: var(--f-fg);
-}
-
-.field-petrol {
-  --f-bg: var(--field-petrol-bg);
-  --f-fg: var(--field-petrol-fg);
-}
-.field-teal {
-  --f-bg: var(--field-teal-bg);
-  --f-fg: var(--field-teal-fg);
-}
-/* El acento no pasa AA como texto sobre teal oscuro: el texto usa el del campo */
-.dark .field-teal {
-  --accent-ink: var(--f-fg);
-}
-.field-paper {
-  --f-bg: var(--field-paper-bg);
-  --f-fg: var(--field-paper-fg);
-}
-.field-contrast {
-  --f-bg: var(--field-contrast-bg);
-  --f-fg: var(--field-contrast-fg);
-  --accent-ink: var(--field-contrast-accent);
-  /* Controles nativos (casilla) segun el fondo real, opuesto al del tema */
-  color-scheme: dark;
-}
-.dark .field-contrast {
-  color-scheme: light;
+  --background: var(--night);
+  --foreground: var(--bone);
+  --card: var(--stone-dark);
+  --card-foreground: var(--bone);
+  --popover: var(--stone-dark);
+  --popover-foreground: var(--bone);
+  --primary: var(--blood);
+  --primary-foreground: #fff4dc;
+  --secondary: #1d1b25;
+  --secondary-foreground: var(--bone);
+  --muted: #1d1b25;
+  --muted-foreground: var(--ash);
+  --accent: var(--bone);
+  --accent-foreground: var(--night);
+  --destructive: #ff6a4a;
+  --border: #2b2936;
+  --input: var(--iron);
+  --ring: var(--torch);
+  --radius: 0;
 }
 
-/* Titulares: Archivo ancho y pesado, la firma de la pagina. */
-.type-display {
-  font-weight: 800;
-  font-stretch: 112%;
-  letter-spacing: -0.02em;
+.font-pixel {
+  font-family: var(--font-pixel), "Courier New", monospace;
+  font-weight: 700;
+}
+
+.font-label {
+  font-family: var(--font-label), "Courier New", monospace;
+  letter-spacing: 0.02em;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+/* Titular: contorno negro de 4 px, sombra granate y resplandor de luna roja */
+.castle-title {
+  color: var(--bone);
+  text-shadow:
+    0.04em 0 0 #000,
+    -0.04em 0 0 #000,
+    0 0.04em 0 #000,
+    0 -0.04em 0 #000,
+    0.08em 0.08em 0 #3a0d0a,
+    0 0 0.4em rgba(179, 38, 30, 0.45);
+}
+
+/* Placas forjadas: los botones del mundo */
+.plate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--font-pixel), "Courier New", monospace;
+  font-weight: 700;
+  font-size: 1.125rem;
   line-height: 1;
+  padding: 0.95rem 1.5rem 1.05rem;
+  text-decoration: none;
+  transition: transform 0.12s steps(2), background-color 0.12s steps(2), box-shadow 0.12s steps(2);
+}
+.plate:hover {
+  transform: translateY(-2px);
+}
+.plate:active {
+  transform: translateY(2px);
+}
+.plate:focus-visible {
+  outline: 3px solid var(--torch);
+  outline-offset: 4px;
+}
+.plate:disabled {
+  cursor: wait;
+  opacity: 0.6;
+  transform: none;
+}
+.plate-primary {
+  background: var(--blood);
+  color: #fff4dc;
+  box-shadow:
+    inset 0 0 0 3px var(--ember),
+    inset 0 -6px 0 #8c1d16,
+    0 4px 0 #4a0c08,
+    0 0 24px rgba(179, 38, 30, 0.35);
+}
+.plate-primary:hover {
+  background: #c42c22;
+}
+.plate-ghost {
+  background: #0d0b14;
+  color: var(--bone);
+  box-shadow:
+    inset 0 0 0 3px #6f7686,
+    inset 0 -6px 0 #050407,
+    0 4px 0 #000;
+}
+.plate-ghost:hover {
+  box-shadow:
+    inset 0 0 0 3px var(--bone),
+    inset 0 -6px 0 #050407,
+    0 4px 0 #000;
 }
 
-/* Carrusel: sin barra visible; se navega deslizando, con flechas o teclado. */
-.no-scrollbar {
-  scrollbar-width: none;
+/* Estandartes del castillo: zona de clic sobre la escena */
+.banner-hit {
+  display: block;
+  transition: box-shadow 0.15s steps(2), background-color 0.15s steps(2);
 }
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* En pantallas pequeñas el estandarte mide ~25 px: se amplía la zona táctil */
+.banner-hit::before {
+  content: "";
+  position: absolute;
+  inset: -6px -4px;
+}
+.banner-hit:hover,
+.banner-hit:focus-visible {
+  outline: none;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow:
+    0 0 0 3px var(--glow),
+    0 0 32px var(--glow);
+}
+/* Laterales de la escena en pantallas panorámicas: continúan el cielo y el suelo
+   de scene.png (mismas bandas y alturas) y los bordes de la escena se funden. */
+/* Móvil: cielo nocturno estrellado continuo sobre el texto y la escena */
+.castle-sides {
+  background-color: #06050a;
+  background-image:
+    url("/castle/stars.svg"),
+    linear-gradient(180deg, #06050a 0%, #0d0a18 55%, #160f22 100%);
+  background-size: 256px 256px, auto;
+  image-rendering: pixelated;
+}
+@media (min-width: 1024px) {
+.castle-sides {
+  background-repeat: repeat-x, repeat-x, no-repeat;
+  background-position: 0 0, 0 256px, 0 0;
+  background-image:
+    url("/castle/stars.svg"),
+    url("/castle/stars.svg"),
+    linear-gradient(
+    180deg,
+    #06050a 0%,
+    #0a0812 22%,
+    #110c1d 36%,
+    #1c1126 50%,
+    #2e142a 62%,
+    #38152a 66%,
+    #120d1c 70%,
+    #0c0912 76%,
+    #08060c 81.5%,
+    #1d261b 82%,
+    #0e130e 84%,
+    #0e130e 100%
+  );
+  background-size: 256px 256px, 256px 256px, auto;
+}
+}
+@media (min-width: 1024px) and (min-aspect-ratio: 8/5) {
+  .castle-frame {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  }
+}
+
+/* Las placas del castillo escalan con la escena para no pisar al caballero */
+@media (min-width: 1024px) {
+  .hero-plates .plate {
+    font-size: max(0.8rem, 1.25cqw);
+    padding: 0.85cqw 1.35cqw 0.95cqw;
+    white-space: nowrap;
+  }
+}
+
+.banner-label {
+  white-space: nowrap;
+  font-size: clamp(0.55rem, 0.8cqw, 0.75rem);
+  padding: 0.35em 0.6em;
+  color: var(--bone);
+  background: rgba(5, 4, 9, 0.88);
+  border: 2px solid #2b2936;
+  pointer-events: none;
+}
+
+@keyframes bolt {
+  0%,
+  93%,
+  100% {
+    opacity: 0;
+  }
+  94%,
+  96% {
+    opacity: 0.45;
+  }
+  95% {
+    opacity: 0.12;
+  }
+}
+.castle-bolt {
+  background: #c9d4ff;
+  mix-blend-mode: overlay;
+  opacity: 0;
+  animation: bolt 9s linear infinite;
+}
+.castle-vignette {
+  background: radial-gradient(ellipse at 62% 45%, transparent 42%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+/* Muro de piedra con la luz de una antorcha */
+.stone-wall {
+  background-color: #15141b;
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(255, 138, 42, 0.09), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(0, 0, 0, 0.55) 100%),
+    url("/castle/bricks.svg");
+  background-size: auto, auto, 64px 32px;
+  image-rendering: pixelated;
+}
+
+/* Ficha de objeto: el borde lleva el color de la rareza */
+.item-card {
+  background: rgba(10, 8, 18, 0.96);
+  color: var(--bone);
+  box-shadow:
+    inset 0 0 0 3px var(--rarity, var(--iron)),
+    0 0 0 4px #030205,
+    0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.shield-btn {
+  padding: 0.75rem 0.5rem;
+  transition: transform 0.15s steps(2);
+}
+.shield-btn:hover {
+  transform: translateY(-4px);
+}
+.shield-btn:focus-visible {
+  outline: 3px solid var(--torch);
+  outline-offset: 2px;
+}
+.shield-svg {
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.55));
+}
+.shield-btn.is-selected .shield-svg {
+  animation: bob 2.4s steps(4) infinite;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.55)) drop-shadow(0 0 14px var(--rarity));
+}
+
+.status-live {
+  color: #57d36a;
+}
+.status-demo {
+  color: var(--torch);
+}
+.status-private {
+  color: #a9a3b8;
+}
+
+/* Pergamino: la historia del personaje, tinta oscura sobre papel viejo */
+.parchment {
+  position: relative;
+  color: #2a1d12;
+  background: #d6c7a4 url("/castle/parchment.svg") repeat;
+  background-size: 48px 48px;
+  image-rendering: pixelated;
+  /* Esquinas mordidas en escalón de píxel: el papel está gastado */
+  clip-path: polygon(
+    0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0,
+    calc(100% - 12px) 0, calc(100% - 12px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 12px, 100% 12px,
+    100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px), calc(100% - 4px) calc(100% - 4px), calc(100% - 8px) calc(100% - 4px), calc(100% - 8px) 100%,
+    12px 100%, 12px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 12px), 0 calc(100% - 12px)
+  );
+  box-shadow:
+    inset 0 0 0 4px #b39b70,
+    inset 0 12px 0 #c2ad83,
+    inset 0 -12px 0 #c2ad83;
+}
+
+/* Árbol de talentos: ranuras unidas por una línea de píxeles */
+.talent-tree {
+  display: grid;
+  gap: 0.9rem;
+}
+.talent-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.talent-row + .talent-row::before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: -0.9rem;
+  width: 4px;
+  height: 0.9rem;
+  background: #a07c32;
+  box-shadow: 0 0 0 1px #2a1f0e;
+}
+.talent-slot {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  font-size: 0.7rem;
+  color: #f0cf7a;
+  background: #120f19;
+  box-shadow:
+    inset 0 0 0 3px #d4a73e,
+    inset 0 0 0 6px #120f19,
+    inset 0 0 0 7px #5c4a26,
+    0 0 0 3px #050407;
+}
+
+/* Tablón de madera con clavos para "buscar grupo" */
+.wood-board {
+  background-color: #3a2616;
+  background-image: url("/castle/planks.svg");
+  background-size: 128px 64px;
+  image-rendering: pixelated;
+  box-shadow:
+    inset 0 0 0 6px #22160c,
+    inset 0 0 0 9px #4a321c,
+    0 0 0 3px #050407,
+    0 30px 70px rgba(0, 0, 0, 0.6);
+}
+.wood-board::before,
+.wood-board::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  width: 8px;
+  height: 8px;
+  background: #8a8f9c;
+  box-shadow:
+    inset -2px -2px 0 #4b505d,
+    0 0 0 2px #120b06;
+}
+.wood-board::before {
+  left: 18px;
+}
+.wood-board::after {
+  right: 18px;
+}
+.pixel-field {
+  background: #0a0812;
+  box-shadow: inset 0 0 0 3px var(--iron);
+  caret-color: var(--ember);
+}
+.pixel-field:focus {
+  box-shadow: inset 0 0 0 3px var(--ember);
 }
 
 ::selection {
-  background: var(--pal-orange);
-  color: var(--pal-ink-strong);
-}
-
-/* Velo de superposicion neutro (no hereda el campo de la seccion). */
-.scrim {
-  background-color: color-mix(in oklch, #05070a 72%, transparent);
+  background: var(--blood);
+  color: #fff4dc;
 }
 
 @layer base {
@@ -216,113 +427,35 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 72px;
-    caret-color: var(--foreground);
+    color-scheme: dark;
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-sans-body);
-    caret-color: var(--foreground);
-  }
-  input,
-  textarea {
-    caret-color: var(--foreground);
+    font-family: var(--font-sans-body), system-ui, sans-serif;
+    caret-color: var(--ember);
   }
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--background);
+    background: var(--night);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 1px;
+    background: #2b2936;
+    box-shadow: inset 0 0 0 2px #050407;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--accent);
+    background: var(--iron);
   }
   .reveal {
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal.visible {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* ---------------------------------------------------------------------------
-   Firma de motion del Hero
-   - hero-mask / hero-line: el nombre emerge desde una mascara
-   - hero-fade: entrada escalonada del resto del contenido
-   Los estados iniciales viven SOLO dentro de los keyframes: si la animacion no
-   corre, el contenido se pinta en su estado final (nunca queda oculto).
---------------------------------------------------------------------------- */
-@keyframes editorial-rise {
-  from {
-    transform: translateY(115%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes editorial-fade {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hero-mask {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.06em;
-}
-
-.hero-line {
-  display: block;
-  animation: editorial-rise 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.hero-fade {
-  animation: editorial-fade 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* Interaccion: el subrayado se redibuja al pasar el raton; en reposo sigue
-   visible para que el enlace se identifique sin depender del hover. */
-@keyframes link-draw {
-  from {
-    background-size: 0 2px;
-  }
-  to {
-    background-size: 100% 2px;
-  }
-}
-
-.link-draw {
-  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 2px no-repeat;
-  padding-bottom: 2px;
-}
-
-:is(a, button):is(:hover, :focus-visible) > .link-draw {
-  animation: link-draw 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.btn-lift {
-  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.18s;
-}
-
-.btn-lift:hover {
-  transform: translateY(-2px);
-}
-
-.btn-lift:active {
-  transform: translateY(0);
 }
 
 @media print {
@@ -347,7 +480,11 @@
     transition-duration: 0.01ms !important;
     transition-delay: 0s !important;
   }
-  .btn-lift:hover {
+  .castle-bolt {
+    display: none;
+  }
+  .plate:hover,
+  .shield-btn:hover {
     transform: none;
   }
   .reveal {

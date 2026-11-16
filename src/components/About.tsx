@@ -1,64 +1,63 @@
 "use client"
 
 import { useI18n } from "./LanguageProvider"
-import { useReveal } from "@/lib/useReveal"
 
-const skills = [
+// Cada habilidad es una ranura del árbol; la abreviatura hace de icono.
+const branches = [
   {
     nameKey: "skills.frontend.name",
-    techs: ["React", "HTML5", "CSS3", "JavaScript", "Bootstrap", "Tailwind CSS"],
+    techs: [["React", "Re"], ["HTML5", "H5"], ["CSS3", "C3"], ["JavaScript", "JS"], ["Bootstrap", "Bs"], ["Tailwind CSS", "Tw"]],
   },
   {
     nameKey: "skills.backend.name",
-    techs: ["Node.js", "FastAPI", "Python", "Flask"],
+    techs: [["Node.js", "Nd"], ["FastAPI", "FA"], ["Python", "Py"], ["Flask", "Fl"]],
   },
   {
     nameKey: "skills.databases.name",
-    techs: ["MySQL", "PostgreSQL", "SQLite"],
+    techs: [["MySQL", "My"], ["PostgreSQL", "Pg"], ["SQLite", "Sq"]],
   },
   {
     nameKey: "skills.tools.name",
-    techs: ["Git", "GitHub", "Docker", "VS Code", "Postman"],
+    techs: [["Git", "Gt"], ["GitHub", "Gh"], ["Docker", "Dk"], ["VS Code", "VS"], ["Postman", "Pm"]],
   },
 ]
 
 export function About() {
   const { t } = useI18n()
-  const { ref, isVisible } = useReveal()
 
   return (
-    <section id="about" className="px-6">
-      <div
-        ref={ref}
-        className={`reveal mx-auto w-full max-w-[1360px] py-26 ${isVisible ? "visible" : ""}`}
-      >
-        <h2 className="type-display mb-14 text-[clamp(2.75rem,6vw,5.5rem)]">
+    <section id="about" className="stone-wall relative px-6 py-24">
+      <div className="mx-auto max-w-[1360px]">
+        <h2 className="castle-title font-pixel text-[clamp(2.75rem,5vw,4.5rem)] leading-none">
           {t("about.title")}
         </h2>
 
-        <div className="flex flex-wrap gap-x-24 gap-y-12">
-          <div className="max-w-[600px] flex-[1_1_420px] text-xl leading-relaxed">
-            <p className="mb-5">{t("about.p1")}</p>
-            <p>{t("about.p2")}</p>
+        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.5fr)] lg:items-start">
+          <div className="parchment p-6 md:p-8">
+            <h3 className="font-label text-sm text-[#7a1a12]">{t("about.story")}</h3>
+            <p className="mt-4 text-lg leading-relaxed">{t("about.p1")}</p>
+            <p className="mt-4 text-lg leading-relaxed">{t("about.p2")}</p>
           </div>
 
-          <div id="skills" className="flex-[1_1_420px]">
-            <h3 className="mb-2 text-[1.375rem] font-bold text-accent-ink">
-              {t("skills.title")}
-            </h3>
-            <dl>
-              {skills.map((skill) => (
-                <div
-                  key={skill.nameKey}
-                  className="flex flex-wrap gap-x-6 gap-y-1 border-t border-border py-4"
-                >
-                  <dt className="flex-[0_0_10rem] font-bold">
-                    {t(skill.nameKey)}
-                  </dt>
-                  <dd className="flex-[1_1_16rem]">{skill.techs.join(", ")}</dd>
+          <div id="skills">
+            <h3 className="font-pixel text-3xl leading-none text-[#efe6d4]">{t("skills.title")}</h3>
+            <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
+              {branches.map((branch) => (
+                <div key={branch.nameKey}>
+                  <h4 className="font-label text-xs text-[#f0cf7a]">{t(branch.nameKey)}</h4>
+                  <ol className="talent-tree mt-5">
+                    {branch.techs.map(([name, code]) => (
+                      <li key={name} className="talent-row">
+                        <span aria-hidden="true" className="talent-slot font-label">
+                          {code}
+                        </span>
+                        <span className="text-[#e6dccb]">{name}</span>
+                      </li>
+                    ))}
+                  </ol>
                 </div>
               ))}
-            </dl>
+            </div>
           </div>
         </div>
       </div>

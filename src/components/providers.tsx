@@ -25,7 +25,7 @@ export function Providers({
   lang: Lang
 }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+    <ThemeProvider attribute="class" forcedTheme="dark" disableTransitionOnChange>
       <LanguageProvider lang={lang}>{children}</LanguageProvider>
     </ThemeProvider>
   )

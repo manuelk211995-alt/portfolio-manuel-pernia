@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-11-16T14:35:38.147Z",
+        "reason": "Claude decided: the 6px bottom inset on .plate-primary is the pixel-art bevel of the forged plate button defined in the direction contract, not a card accent stripe"
+      }
+    ]
+  }
+}

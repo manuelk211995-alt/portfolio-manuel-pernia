@@ -3,53 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { useI18n } from "./LanguageProvider"
-import { useReveal } from "@/lib/useReveal"
-
-type Project = {
-  title: string
-  descKey: string
-  tags: string[]
-  codeUrl?: string
-  images: string[]
-  demoUrl?: string
-  liveUrl?: string
-}
-
-const projects: Project[] = [
-  {
-    title: "Nivel 60",
-    descKey: "projects.nivel60.desc",
-    tags: ["Astro", "MDX", "JavaScript", "Pagefind", "Blizzard API", "Vercel"],
-    images: [
-      "/nivel60-portada.jpg",
-      "/nivel60-clase.jpg",
-      "/nivel60-calculadora.jpg",
-    ],
-    liveUrl: "https://nivel60.com",
-  },
-  {
-    title: "Economos",
-    descKey: "projects.economos.desc",
-    tags: ["React", "Flask", "Python", "PostgreSQL", "Gemini AI"],
-    codeUrl: "https://github.com/manuelk211995-alt/Proyecto-Final-4Geeks",
-    images: ["/economos-portada.jpg", "/economos-mercados.jpg"],
-    demoUrl: "/economos-promo_2026-07-30_01-28-00_mp3audio.mp4",
-  },
-  {
-    title: "CalcuVolt",
-    descKey: "projects.calcuvolt.desc",
-    tags: ["Python", "FastAPI", "React", "TypeScript", "PostgreSQL", "Docker"],
-    codeUrl: "https://github.com/manuelk211995-alt/CalcuVolt",
-    images: ["/calcuvolt-v2.png"],
-    demoUrl: "/calculovolt-promo_2026-07-30_00-28-57.mp4",
-  },
-  {
-    title: "VolleyPlan",
-    descKey: "projects.volleyplan.desc",
-    tags: ["React", "Vite", "Tailwind CSS", "Express", "SQLite", "Konva"],
-    images: ["/game-plan-voleibol-2.png", "/game-plan-voleibol-1.png"],
-  },
-]
+import { projects, type Project } from "@/lib/projects"
+import { PixelDot, PixelShield, RARITY_COLOR, rarityOf } from "./castle/PixelArt"
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), video[controls], [tabindex]:not([tabindex="-1"])'
@@ -65,33 +20,29 @@ function ProjectGallery({ images, alt }: { images: string[]; alt: string }) {
   }, [images.length])
 
   return (
-    <div className="relative aspect-[3/2] w-full overflow-hidden bg-muted">
+    <div className="relative aspect-[3/2] w-full overflow-hidden bg-[#0d0b14] shadow-[0_0_0_3px_#08060b]">
       {images.map((src, i) => (
         <Image
           key={src}
           src={src}
-          alt={images.length > 1 ? `${alt} ${i + 1}` : alt}
+          alt={images.length > 1 ? `${alt} (${i + 1}/${images.length})` : alt}
           fill
-          sizes="(max-width: 768px) 85vw, (max-width: 1024px) 60vw, 520px"
-          className={`object-cover object-top transition-[opacity,scale] duration-700 ease-out group-hover:scale-[1.03] motion-reduce:group-hover:scale-100 ${i === active ? "opacity-100" : "opacity-0"}`}
+          sizes="(max-width: 1024px) 100vw, 640px"
+          className={`object-cover object-top transition-opacity duration-700 ${i === active ? "opacity-100" : "opacity-0"}`}
         />
       ))}
       {images.length > 1 && (
-        <div className="scrim absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2">
+        <div className="absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 bg-[#08060b]/85">
           {images.map((_, i) => (
             <button
               key={i}
               type="button"
               onClick={() => setActive(i)}
-              aria-label={`${alt} ${i + 1}`}
+              aria-label={`${alt} (${i + 1}/${images.length})`}
               aria-pressed={i === active}
               className="flex size-11 cursor-pointer items-center justify-center"
             >
-              <span
-                className={`size-2 rounded-[1px] transition-colors ${
-                  i === active ? "bg-white" : "bg-white/40"
-                }`}
-              />
+              <span className={`size-2 ${i === active ? "bg-[#efe6d4]" : "bg-[#efe6d4]/35"}`} />
             </button>
           ))}
         </div>
@@ -105,24 +56,14 @@ function ProjectGallery({ images, alt }: { images: string[]; alt: string }) {
  * Accesible: role=dialog + aria-modal, aria-labelledby, focus trap, Escape
  * cierra, scroll bloqueado y el foco vuelve al disparador al cerrar.
  */
-function DemoDialog({
-  project,
-  onClose,
-}: {
-  project: Project
-  onClose: () => void
-}) {
+function DemoDialog({ project, onClose }: { project: Project; onClose: () => void }) {
   const { t } = useI18n()
   const dialogRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const trigger =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null
+    const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = "hidden"
-
     const raf = requestAnimationFrame(() => dialogRef.current?.focus())
 
     const onKeyDown = (e: KeyboardEvent) => {
@@ -132,19 +73,15 @@ function DemoDialog({
         return
       }
       if (e.key !== "Tab") return
-
       const root = dialogRef.current
       if (!root) return
-
-      const items = Array.from(
-        root.querySelectorAll<HTMLElement>(FOCUSABLE)
-      ).filter((el) => el.getClientRects().length > 0)
+      const items = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+        (el) => el.getClientRects().length > 0
+      )
       if (items.length === 0) return
-
       const first = items[0]
       const last = items[items.length - 1]
       const active = document.activeElement
-
       if (!active || !root.contains(active)) {
         e.preventDefault()
         first.focus()
@@ -170,7 +107,7 @@ function DemoDialog({
 
   return (
     <div
-      className="scrim fixed inset-0 z-50 flex items-end justify-center overflow-y-auto p-0 backdrop-blur-sm sm:items-center sm:p-6"
+      className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-[#030205]/80 p-0 sm:items-center sm:p-6"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
@@ -181,31 +118,20 @@ function DemoDialog({
         aria-modal="true"
         aria-labelledby="demo-dialog-title"
         tabIndex={-1}
-        className="field-paper w-full max-w-4xl border border-border shadow-2xl shadow-black/20 outline-none"
+        className="item-card w-full max-w-4xl outline-none"
       >
-        <div className="flex items-center justify-between gap-4 border-b border-border px-5 py-3 md:px-7">
-          <h3
-            id="demo-dialog-title"
-            translate="no"
-            className="type-display text-2xl md:text-3xl"
-          >
+        <div className="flex items-center justify-between gap-4 px-5 py-3 md:px-7">
+          <h3 id="demo-dialog-title" translate="no" className="font-pixel text-2xl md:text-3xl">
             {project.title}
           </h3>
           <button
             type="button"
             onClick={onClose}
             aria-label={t("ui.close")}
-            className="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-[2px] border border-border transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
+            className="plate plate-ghost flex size-11 items-center justify-center !p-0"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              className="size-4"
-              aria-hidden="true"
-            >
-              <path d="M6 6l12 12M18 6L6 18" />
+            <svg viewBox="0 0 8 8" shapeRendering="crispEdges" className="size-4" aria-hidden="true">
+              <path fill="currentColor" d="M0 0h2v2h-2zM6 0h2v2h-2zM2 2h2v2h-2zM4 2h2v2h-2zM2 4h2v2h-2zM4 4h2v2h-2zM0 6h2v2h-2zM6 6h2v2h-2z" />
             </svg>
           </button>
         </div>
@@ -222,170 +148,137 @@ function DemoDialog({
   )
 }
 
-function ProjectRow({
-  project,
-  index,
-  onDemo,
-}: {
-  project: Project
-  index: number
-  onDemo: (project: Project) => void
-}) {
+function ItemCard({ project, onDemo }: { project: Project; onDemo: (p: Project) => void }) {
   const { t } = useI18n()
-  const { ref, isVisible } = useReveal()
+  const rarity = rarityOf(project.status)
+  const color = RARITY_COLOR[rarity]
 
   return (
-    // Ancho fijo por tarjeta: se ven 1, 1.5 o 2.5 segun la pantalla, y la que
-    // asoma indica que el carrusel continua.
-    <li className="shrink-0 basis-[85%] snap-start md:basis-[calc((100%_-_2rem)/1.5)] lg:basis-[calc((100%_-_4rem)/2.5)]">
-      {/* Entrada escalonada solo para las que se ven al llegar; el resto entra
-          sin espera al deslizar. */}
-      <div
-        ref={ref}
-        style={{ transitionDelay: `${index < 3 ? index * 180 : 0}ms` }}
-        className={`reveal h-full ${isVisible ? "visible" : ""}`}
-      >
-        <article className="group flex h-full min-w-0 flex-col">
-          <ProjectGallery images={project.images} alt={project.title} />
-
-          <p className="mt-6 mb-1 font-bold text-accent-ink">
-            {String(index + 1).padStart(2, "0")}
-          </p>
-          <h3 translate="no" className="type-display mb-4 text-[2.75rem]">
-            {project.title}
-          </h3>
-          <p className="mb-4 text-lg leading-relaxed">{t(project.descKey)}</p>
-          <p className="mb-4 font-semibold">{project.tags.join(" · ")}</p>
-
-          {(project.liveUrl || project.demoUrl || project.codeUrl) && (
-            <div className="mt-auto flex flex-wrap gap-x-6 gap-y-1 font-bold">
-              {project.liveUrl && (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-3"
-                >
-                  <span className="link-draw">{t("projects.live")}</span>
-                </a>
-              )}
-              {project.demoUrl && (
-                <button
-                  type="button"
-                  onClick={() => onDemo(project)}
-                  className="cursor-pointer py-3 font-bold"
-                >
-                  <span className="link-draw">{t("projects.demo")}</span>
-                </button>
-              )}
-              {project.codeUrl && (
-                <a
-                  href={project.codeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-3"
-                >
-                  <span className="link-draw">{t("projects.code")}</span>
-                </a>
-              )}
-            </div>
-          )}
-        </article>
+    <article
+      aria-live="polite"
+      className="item-card p-5 md:p-7"
+      style={{ ["--rarity" as string]: color.field }}
+    >
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <h3 translate="no" className="font-pixel text-4xl md:text-5xl" style={{ color: color.text }}>
+          {project.title}
+        </h3>
+        <span className={`font-label text-sm status-${project.status}`}>
+          <PixelDot className="mr-1.5 inline-block size-[0.6em] align-[0.05em]" />
+          {t(`projects.status.${project.status}`)}
+        </span>
       </div>
-    </li>
+      <p className="mt-1 text-[#efe6d4]">
+        {t(`projects.rarity.${rarity}`)} · {t(project.kindKey)}
+      </p>
+
+      <div className="mt-4">
+        <ProjectGallery images={project.images} alt={`${project.title}: ${t(project.kindKey)}`} />
+        {project.illustrative && (
+          <p className="mt-2 text-sm text-[#b9b0c8]">{t("projects.illustrative")}</p>
+        )}
+      </div>
+
+      <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-1 sm:grid-cols-3">
+        {project.tags.map((tag) => (
+          <li key={tag} className="text-[#efe6d4]">
+            <span aria-hidden="true" className="text-[#57d36a]">+ </span>
+            {tag}
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-4 max-w-[65ch] leading-relaxed text-[#cfc5b4]">{t(project.descKey)}</p>
+
+      {(project.liveUrl || project.demoUrl || project.codeUrl) && (
+        <div className="mt-6 flex flex-wrap gap-4">
+          {project.liveUrl && (
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="plate plate-primary">
+              {t("projects.live")}
+            </a>
+          )}
+          {project.demoUrl && (
+            <button
+              type="button"
+              onClick={() => onDemo(project)}
+              className={`plate ${project.liveUrl ? "plate-ghost" : "plate-primary"}`}
+            >
+              {t("projects.demo")}
+            </button>
+          )}
+          {project.codeUrl && (
+            <a href={project.codeUrl} target="_blank" rel="noopener noreferrer" className="plate plate-ghost">
+              {t("projects.code")}
+            </a>
+          )}
+        </div>
+      )}
+    </article>
   )
 }
 
-const arrowClassName =
-  "flex size-11 cursor-pointer items-center justify-center rounded-[2px] border border-foreground transition-colors hover:bg-foreground hover:text-background disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-transparent disabled:hover:text-foreground"
-
 export function Projects() {
-  const [demo, setDemo] = useState<Project | null>(null)
-  const [edges, setEdges] = useState({ start: true, end: false })
-  const listRef = useRef<HTMLOListElement>(null)
   const { t } = useI18n()
-
+  const [activeSlug, setActiveSlug] = useState(projects[0].slug)
+  const [demo, setDemo] = useState<Project | null>(null)
   const closeDialog = useCallback(() => setDemo(null), [])
+  const active = projects.find((p) => p.slug === activeSlug) ?? projects[0]
 
-  // Las flechas se desactivan en los extremos. El ResizeObserver da la primera
-  // medida y la actualiza si cambia el ancho de la pantalla.
+  // Los estandartes del castillo enlazan a #armory-<slug>: ese escudo queda elegido.
   useEffect(() => {
-    const list = listRef.current
-    if (!list) return
-    const update = () => {
-      const max = list.scrollWidth - list.clientWidth
-      setEdges({ start: list.scrollLeft <= 4, end: list.scrollLeft >= max - 4 })
+    const fromHash = () => {
+      const slug = window.location.hash.replace("#armory-", "")
+      if (projects.some((p) => p.slug === slug)) setActiveSlug(slug)
     }
-    list.addEventListener("scroll", update, { passive: true })
-    const observer = new ResizeObserver(update)
-    observer.observe(list)
+    const raf = requestAnimationFrame(fromHash)
+    window.addEventListener("hashchange", fromHash)
     return () => {
-      list.removeEventListener("scroll", update)
-      observer.disconnect()
+      cancelAnimationFrame(raf)
+      window.removeEventListener("hashchange", fromHash)
     }
   }, [])
 
-  const scrollByCard = (direction: 1 | -1) => {
-    const list = listRef.current
-    const card = list?.querySelector("li")
-    if (!list || !card) return
-    const gap = parseFloat(getComputedStyle(list).columnGap) || 0
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    list.scrollBy({
-      left: direction * (card.getBoundingClientRect().width + gap),
-      behavior: reduced ? "auto" : "smooth",
-    })
-  }
-
   return (
-    <section id="projects" className="field-teal px-6">
-      <div className="mx-auto max-w-[1360px] py-24">
-        <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
-          <h2 className="type-display text-[clamp(2.75rem,6vw,5.5rem)]">
-            {t("projects.title")}
-          </h2>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => scrollByCard(-1)}
-              disabled={edges.start}
-              aria-label={t("projects.prev")}
-              aria-controls="projects-list"
-              className={arrowClassName}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5" aria-hidden="true">
-                <path d="M15 6l-6 6 6 6" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollByCard(1)}
-              disabled={edges.end}
-              aria-label={t("projects.next")}
-              aria-controls="projects-list"
-              className={arrowClassName}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-5" aria-hidden="true">
-                <path d="M9 6l6 6-6 6" />
-              </svg>
-            </button>
+    <section id="projects" className="stone-wall relative px-6 py-24">
+      <div className="mx-auto max-w-[1360px]">
+        <h2 className="castle-title font-pixel text-[clamp(2.75rem,5vw,4.5rem)] leading-none">
+          {t("projects.title")}
+        </h2>
+        <p className="font-label mt-3 text-sm text-[#cfc7dd]">{t("projects.subtitle")}</p>
+
+        <div className="mt-12 grid gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start">
+          <div>
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 lg:grid-cols-2">
+              {projects.map((project) => {
+                const rarity = rarityOf(project.status)
+                const selected = project.slug === active.slug
+                return (
+                  <li key={project.slug}>
+                    <button
+                      id={`armory-${project.slug}`}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => setActiveSlug(project.slug)}
+                      className={`shield-btn group flex w-full cursor-pointer flex-col items-center gap-2 ${selected ? "is-selected" : ""}`}
+                      style={{ ["--rarity" as string]: RARITY_COLOR[rarity].field }}
+                    >
+                      <PixelShield slug={project.slug} status={project.status} className="shield-svg w-[min(9rem,70%)]" />
+                      <span translate="no" className="font-label text-sm text-[#efe6d4]">
+                        {project.title}
+                      </span>
+                      <span className="font-label text-xs" style={{ color: RARITY_COLOR[rarity].text }}>
+                        {t(`projects.rarity.${rarity}`)}
+                      </span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+            <p className="mt-8 max-w-[44ch] text-sm leading-relaxed text-[#b9b0c8]">{t("projects.legend")}</p>
           </div>
+
+          <ItemCard key={active.slug} project={active} onDemo={setDemo} />
         </div>
-        {/* -mx-2/px-2 deja sitio al anillo de foco dentro del area con scroll. */}
-        <ol
-          id="projects-list"
-          ref={listRef}
-          className="no-scrollbar -mx-2 flex snap-x snap-mandatory scroll-px-2 gap-8 overflow-x-auto px-2 pb-2"
-        >
-          {projects.map((project, i) => (
-            <ProjectRow
-              key={project.title}
-              project={project}
-              index={i}
-              onDemo={setDemo}
-            />
-          ))}
-        </ol>
       </div>
 
       {demo && <DemoDialog project={demo} onClose={closeDialog} />}

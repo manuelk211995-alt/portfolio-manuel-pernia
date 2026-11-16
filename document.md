@@ -812,6 +812,84 @@ Contraste calculado: acento sobre petróleo 4.54:1, negro sobre acento 6.59:1, p
 
 ---
 
+## 37. Rediseño "Castillo de noche" en pixel art (MMORPG)
+
+**Petición:** el diseño "Banco de trabajo" se sentía sencillo y genérico. Tras varias rondas de propuestas (lienzo Design, filas "Rediseño 2" a "5"), el usuario fijó la dirección: MMORPG, pixel art, caballeros, espadas y escudos; tono oscuro, tenebroso e imponente; la página entera es el mundo; caballero detallado que ataca a monstruos con un tajo sutil; los proyectos, siempre visibles.
+
+**Contexto de producto:** se creó `PRODUCT.md` (audiencias: empresas y clientes por igual; diferencial: entrenador FIVB y formación eléctrica; foco: herramientas para oficios). El contrato de la dirección está en `.impeccable/surfaces/src-app-lang-page-tsx.md`.
+
+**Escena del castillo (`Hero.tsx`):**
+- Escenario en pixel art de 360×225 (`public/castle/scene.png`, 10 KB) ampliado con `image-rendering: pixelated`.
+- Actores animados en `public/castle/actors.svg` (32 KB): caballero, babosa cada 6 s, antorchas, brasas, niebla y estrellas.
+- `actors-still.svg` para `prefers-reduced-motion`, servido con `<picture>`.
+- Los estandartes son enlaces a `#armory-<slug>` sobre la escena; en escritorio el texto va superpuesto y en móvil encima de la escena.
+- Generador: script de Node en la carpeta temporal de la sesión (no en el repo). Para regenerar los recursos hay que volver a crearlo; la escena se definió por código con un sprite base y sombreado automático.
+
+**Otras secciones:**
+- **Armería (`Projects.tsx`):** escudos en pixel art con rareza según el estado (en vivo = legendario, demo = épico, privado = raro), ficha del objeto con galería, tecnologías, descripción y acciones, más el diálogo de demo.
+- **Talentos (`About.tsx`)** y **Buscar grupo (`Contact.tsx`):** paneles de piedra y tablón de madera. El formulario conserva validación, campo trampa y envío.
+- **Datos compartidos:** `src/lib/projects.ts`. Sprites en `src/components/castle/PixelArt.tsx`.
+
+**Sistema:**
+- Tipografías Pixelify Sans (títulos y botones), Silkscreen (etiquetas) y Schibsted Grotesk (texto).
+- Solo tema oscuro: `forcedTheme="dark"` y se elimina `ThemeToggle.tsx`.
+- Botones como placas forjadas (`.plate`). El detector marcaba su bisel inferior como "side-tab": se registró una excepción con alcance a `globals.css` en `.impeccable/config.json`.
+
+**Verificación:**
+- `tsc`, `lint`, `build` e `impeccable detect src/` ✅.
+- En navegador: sin desborde a 375 px; el estandarte lleva a su escudo en la armería; el diálogo de demo abre y cierra con Escape; consola sin errores.
+- Capturas en `.impeccable/review/`. La revisión final independiente se registra al terminar.
+
+**Pendiente:** CalcuVolt sigue con imagen de maqueta. La imagen OG (`og-image.tsx`) aún usa la paleta anterior. Sin commit ni push.
+
+---
+
+## 38. La escena del castillo no cabía en pantalla + arreglos de la revisión final
+
+- **Síntoma:** en portátil (1366×657, 1440×900) la escena del héroe era más alta que la ventana; no se veía entera la animación ni el castillo, y las placas se montaban sobre el caballero.
+- **Causa:** la escena (8:5) ocupaba todo el ancho, así que su altura dependía del ancho y no del alto de la ventana.
+- **Solución:** contenedor `lg:w-[min(100%,160svh)]` con `@container`; textos y placas en `cqw`; laterales con cielo estrellado y degradado; fundido de bordes en `.castle-frame` (9 %, solo si la ventana es más ancha que 8:5, para que no se vea costura a 1920).
+- **Revisión final (impeccable-finish-reviewer):**
+  - Talentos y tablón dentro del mundo: muro de piedra, árbol con ranuras y conectores dorados, tablón de tablas (`planks.svg`) con clavos.
+  - Pergamino con textura de píxel (`public/castle/parchment.svg`) y esquinas gastadas en escalón, en lugar de un relleno plano.
+  - "Árbol de talentos" pasa a ser el título real del árbol, en lugar de una etiqueta pequeña encima.
+  - Etiquetas de proyectos bajo la escena en móvil, con enlaces de 44 px.
+  - Cielo estrellado en el héroe móvil.
+  - Nota "Imagen ilustrativa" en CalcuVolt, comprobada en ES y EN.
+  - Glifos Unicode sustituidos por SVG de píxel.
+  - GitHub y LinkedIn en el tablón.
+- **Pendiente:**
+  - Reescribir about.p1/p2 con FIVB, el trasfondo eléctrico y las herramientas por sector. Necesita la aprobación de Manuel.
+  - Iconos dibujados en las ranuras de talentos; ahora son códigos de dos letras.
+  - Imagen OG con la paleta nueva.
+
+## 39. Texto "Historia del personaje" reescrito con datos reales
+
+- **Síntoma:** about.p1/p2 eran texto genérico de desarrollador; no contaban lo que diferencia a Manuel.
+- **Causa:** copia heredada del diseño anterior.
+- **Solución:** nuevo texto ES/EN aprobado por Manuel. Incluye: Técnico Superior Universitario en Electricidad, último año de Ingeniería Eléctrica, entrenador de voleibol FIVB, CalcuVolt y VolleyPlan como fruto de esos oficios, y herramientas para sectores reales. No incluye cifras ni años inventados. PRODUCT.md actualizado con el título.
+
+## 40. SEO revisado antes de publicar el rediseño
+
+- **Síntoma:**
+  - La meta descripción era genérica ("aplicaciones web modernas y escalables").
+  - La imagen OG seguía con la paleta petróleo/naranja antigua.
+  - Las imágenes de proyectos tenían alt "Nivel 60 1".
+  - En el JSON-LD, ProfilePage no tenía `mainEntity`.
+- **Causa:** los datos SEO no se actualizaron con el rediseño ni con el nuevo texto "Historia del personaje".
+- **Solución:**
+  - `src/lib/site.ts`: descripciones ES/EN de 155 caracteres centradas en herramientas para oficios reales (cálculos eléctricos, voleibol, Granada). Más keywords y `knowsAbout` (ingeniería eléctrica, REBT, NEC, voleibol).
+  - `layout.tsx` JSON-LD:
+    - ProfilePage usa `mainEntity` (lo pide Google).
+    - Person añade `description`, `address` (Granada, ES) y `hasCredential` (TSU en Electricidad).
+  - `src/lib/og-image.tsx`:
+    - La imagen OG ahora es la escena del castillo (`public/castle/og-scene.png`, 1200×750 escalada sin suavizado), con nombre, rol y "Herramientas para oficios reales".
+    - Carga la escena por fetch desde el origen de la petición.
+    - Caché bajada de immutable/1 año a 1 día para que se renueve.
+  - `Projects.tsx`: alt descriptivo "Nivel 60: Web de guías (1/3)".
+- **Comprobado:** tsc, lint y build pasan. Revisado el HTML de /es: title, description, canonical, hreflang, og:image y JSON-LD con UTF-8 correcto. /api/og devuelve 200 en ES y EN. Sitemap y robots siguen correctos.
+- **Nota:** las redes (LinkedIn, WhatsApp) guardan en caché la imagen OG antigua. Tras publicar, se puede forzar con el Post Inspector de LinkedIn.
+
 ## Comandos útiles
 
 ```powershell
