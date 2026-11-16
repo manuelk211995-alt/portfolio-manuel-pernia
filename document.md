@@ -906,6 +906,20 @@ Contraste calculado: acento sobre petróleo 4.54:1, negro sobre acento 6.59:1, p
   3. Eliminadas la viñeta y la máscara. En escritorio, los laterales prolongan la primera y la última columna de píxeles de `scene.png` (`public/castle/edge-left.png`, `edge-right.png`, 1×225) con estrellas encima. La escena queda sin corte ni sombra.
 - **Comprobado:** mediciones en 375, 1024, 1366 y 1920 px, sin solapes ni scroll horizontal. tsc y lint pasan.
 
+## 42. Laterales del héroe en pixel art real y nombres de tecnologías protegidos del traductor
+
+- **Síntoma:**
+  1. Manuel seguía viendo los bordes de la escena "fundidos". Los laterales eran la primera y la última columna de scene.png estiradas: bandas lisas, sin píxeles visibles.
+  2. "SQLite" y "Tailwind CSS" se solapaban. El traductor del navegador convertía "Tailwind CSS" en "viento de cola CSS", un texto más largo.
+- **Causa:**
+  1. Estirar una columna de 1 px pierde la textura del pixel art (tramado, estrellas, crestas).
+  2. Los nombres de tecnologías no tenían `translate="no"`.
+- **Solución:**
+  1. `public/castle/side-left.svg` y `side-right.svg` (240×225, crispEdges) se generan con las mismas fórmulas que la escena (cielo tramado, montañas sinusoidales, hierba), más estrellas, rocas y matas. Así la unión con la escena es exacta. Se colocan como `<img>` en `right-full`/`left-full` del contenedor de la escena, solo en lg, con `overflow-hidden` en la sección. Se eliminan edge-left/right.png.
+     - Generador guardado en `.impeccable/sides-generator.js`. Se ejecuta con `node .impeccable/sides-generator.js public/castle`.
+  2. `translate="no"` en cada nombre del árbol de talentos.
+- **Comprobado:** a 1920×960 la escena y los laterales se unen sin corte ni sombra, sin scroll horizontal. tsc, lint y detect pasan. No pude reproducir el solape de SQLite en 375, 1024 ni 1366, ni siquiera con el texto traducido. Si persiste, hace falta una captura de Manuel con el ancho exacto.
+
 ## Comandos útiles
 
 ```powershell

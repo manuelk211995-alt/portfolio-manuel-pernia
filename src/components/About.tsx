@@ -51,7 +51,7 @@ export function About() {
                         <span aria-hidden="true" className="talent-slot font-label">
                           {code}
                         </span>
-                        <span className="min-w-0 break-words text-[#e6dccb]">{name}</span>
+                        <span translate="no" className="min-w-0 break-words text-[#e6dccb]">{name}</span>
                       </li>
                     ))}
                   </ol>

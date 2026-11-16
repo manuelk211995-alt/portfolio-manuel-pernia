@@ -183,19 +183,11 @@
   background-size: 256px 256px, auto;
   image-rendering: pixelated;
 }
-/* Escritorio: los laterales prolongan la primera y la última columna de píxeles de
-   scene.png (cielo, montes y suelo a la misma altura), así la escena no tiene corte
-   ni sombreado en los bordes. Encima, estrellas solo en la franja del cielo. */
+/* Escritorio: los laterales son imágenes de pixel art (side-left/right.svg) que
+   continúan el paisaje de la escena; aquí solo queda el color de fondo. */
 @media (min-width: 1024px) {
   .castle-sides {
-    background-image:
-      url("/castle/stars.svg"),
-      url("/castle/stars.svg"),
-      url("/castle/edge-left.png"),
-      url("/castle/edge-right.png");
-    background-repeat: repeat-x, repeat-x, no-repeat, no-repeat;
-    background-position: 0 0, 0 256px, left top, right top;
-    background-size: 256px 256px, 256px 256px, 50% 100%, 50% 100%;
+    background-image: none;
   }
 }
 

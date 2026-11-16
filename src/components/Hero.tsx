@@ -17,7 +17,7 @@ export function Hero() {
   const { t } = useI18n()
 
   return (
-    <section id="hero" className="castle-sides relative">
+    <section id="hero" className="castle-sides relative overflow-hidden">
       {/* En escritorio la escena se limita a la altura de la ventana (8:5 → 160svh de ancho
           como máximo) para verse entera; los textos se miden en cqw, relativos a ella. */}
       <div className="@container relative mx-auto lg:w-[min(100%,160svh)]">
@@ -42,6 +42,24 @@ export function Hero() {
           </a>
         </div>
       </div>
+
+      {/* Laterales en pixel art: el mismo paisaje continúa a ambos lados de la escena */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/castle/side-left.svg"
+        alt=""
+        width={240}
+        height={225}
+        className="pointer-events-none absolute top-0 right-full hidden h-full w-auto max-w-none lg:block"
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/castle/side-right.svg"
+        alt=""
+        width={240}
+        height={225}
+        className="pointer-events-none absolute top-0 left-full hidden h-full w-auto max-w-none lg:block"
+      />
 
       <div className="castle-frame relative aspect-[8/5] w-full overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
