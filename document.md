@@ -890,6 +890,22 @@ Contraste calculado: acento sobre petróleo 4.54:1, negro sobre acento 6.59:1, p
 - **Comprobado:** tsc, lint y build pasan. Revisado el HTML de /es: title, description, canonical, hreflang, og:image y JSON-LD con UTF-8 correcto. /api/og devuelve 200 en ES y EN. Sitemap y robots siguen correctos.
 - **Nota:** las redes (LinkedIn, WhatsApp) guardan en caché la imagen OG antigua. Tras publicar, se puede forzar con el Post Inspector de LinkedIn.
 
+## 41. Textos solapados en Talentos y en los estandartes; sombreado en los bordes del héroe
+
+- **Síntoma:**
+  1. En el árbol de talentos, entre 1024 y ~1200 px, "PostgreSQL", "JavaScript" y "Tailwind CSS" invadían la columna vecina.
+  2. Las etiquetas "CalcuVolt" y "VolleyPlan" bajo los estandartes se pisaban (−10 px a 1024).
+  3. A Manuel no le gustaba el oscurecido de los bordes de la escena.
+- **Causa:**
+  1. Rejilla fija de 4 columnas (`sm:grid-cols-4`) de ~128 px; el texto no podía partirse.
+  2. Las etiquetas iban centradas bajo estandartes separados solo 24 px de 360: más estrechos que cualquier etiqueta.
+  3. `.castle-vignette` (degradado radial negro) y la máscara de fundido lateral de `.castle-frame`.
+- **Solución:**
+  1. `grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))]` con `gap-x-4` y `min-w-0 break-words` en el nombre: 3 columnas a 1024, 2 en móvil, 4 en pantallas anchas.
+  2. Por cada pareja, la etiqueta del primero se ancla por la derecha al borde de su estandarte y la del segundo por la izquierda: siempre hay hueco (11 px a 1024, 17 px a 1920).
+  3. Eliminadas la viñeta y la máscara. En escritorio, los laterales prolongan la primera y la última columna de píxeles de `scene.png` (`public/castle/edge-left.png`, `edge-right.png`, 1×225) con estrellas encima. La escena queda sin corte ni sombra.
+- **Comprobado:** mediciones en 375, 1024, 1366 y 1920 px, sin solapes ni scroll horizontal. tsc y lint pasan.
+
 ## Comandos útiles
 
 ```powershell

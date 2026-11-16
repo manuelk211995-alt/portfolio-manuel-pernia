@@ -41,7 +41,7 @@ export function About() {
 
           <div id="skills">
             <h3 className="font-pixel text-3xl leading-none text-[#efe6d4]">{t("skills.title")}</h3>
-            <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
+            <div className="mt-8 grid grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] gap-x-4 gap-y-10">
               {branches.map((branch) => (
                 <div key={branch.nameKey}>
                   <h4 className="font-label text-xs text-[#f0cf7a]">{t(branch.nameKey)}</h4>
@@ -51,7 +51,7 @@ export function About() {
                         <span aria-hidden="true" className="talent-slot font-label">
                           {code}
                         </span>
-                        <span className="text-[#e6dccb]">{name}</span>
+                        <span className="min-w-0 break-words text-[#e6dccb]">{name}</span>
                       </li>
                     ))}
                   </ol>

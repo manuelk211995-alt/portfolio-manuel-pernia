@@ -63,11 +63,14 @@ export function Hero() {
           />
         </picture>
         <div aria-hidden="true" className="castle-bolt pointer-events-none absolute inset-0" />
-        <div aria-hidden="true" className="castle-vignette pointer-events-none absolute inset-0" />
 
         <ul className="absolute inset-0">
-          {projects.map((project) => {
+          {projects.map((project, i) => {
             const x = BANNER_X[project.slug]
+            // Los estandartes van por parejas muy juntas: la etiqueta del primero crece
+            // hacia la izquierda y la del segundo hacia la derecha, así nunca se pisan.
+            const labelSide =
+              i % 2 === 0 ? { right: pct(360 - (x + 20), 360) } : { left: pct(x, 360) }
             const color = RARITY_COLOR[rarityOf(project.status)]
             return (
               <li key={project.slug}>
@@ -86,9 +89,9 @@ export function Hero() {
                 <span
                   translate="no"
                   aria-hidden="true"
-                  className="font-label banner-label absolute hidden -translate-x-1/2 md:block"
+                  className="font-label banner-label absolute hidden md:block"
                   style={{
-                    left: pct(x + 10, 360),
+                    ...labelSide,
                     top: pct(152, 225),
                     color: project.status === "live" ? color.text : undefined,
                     borderColor: project.status === "live" ? color.field : undefined,

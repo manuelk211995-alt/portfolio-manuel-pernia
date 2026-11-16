@@ -174,8 +174,6 @@
     0 0 0 3px var(--glow),
     0 0 32px var(--glow);
 }
-/* Laterales de la escena en pantallas panorámicas: continúan el cielo y el suelo
-   de scene.png (mismas bandas y alturas) y los bordes de la escena se funden. */
 /* Móvil: cielo nocturno estrellado continuo sobre el texto y la escena */
 .castle-sides {
   background-color: #06050a;
@@ -185,35 +183,19 @@
   background-size: 256px 256px, auto;
   image-rendering: pixelated;
 }
+/* Escritorio: los laterales prolongan la primera y la última columna de píxeles de
+   scene.png (cielo, montes y suelo a la misma altura), así la escena no tiene corte
+   ni sombreado en los bordes. Encima, estrellas solo en la franja del cielo. */
 @media (min-width: 1024px) {
-.castle-sides {
-  background-repeat: repeat-x, repeat-x, no-repeat;
-  background-position: 0 0, 0 256px, 0 0;
-  background-image:
-    url("/castle/stars.svg"),
-    url("/castle/stars.svg"),
-    linear-gradient(
-    180deg,
-    #06050a 0%,
-    #0a0812 22%,
-    #110c1d 36%,
-    #1c1126 50%,
-    #2e142a 62%,
-    #38152a 66%,
-    #120d1c 70%,
-    #0c0912 76%,
-    #08060c 81.5%,
-    #1d261b 82%,
-    #0e130e 84%,
-    #0e130e 100%
-  );
-  background-size: 256px 256px, 256px 256px, auto;
-}
-}
-@media (min-width: 1024px) and (min-aspect-ratio: 8/5) {
-  .castle-frame {
-    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
-    mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  .castle-sides {
+    background-image:
+      url("/castle/stars.svg"),
+      url("/castle/stars.svg"),
+      url("/castle/edge-left.png"),
+      url("/castle/edge-right.png");
+    background-repeat: repeat-x, repeat-x, no-repeat, no-repeat;
+    background-position: 0 0, 0 256px, left top, right top;
+    background-size: 256px 256px, 256px 256px, 50% 100%, 50% 100%;
   }
 }
 
@@ -255,9 +237,6 @@
   mix-blend-mode: overlay;
   opacity: 0;
   animation: bolt 9s linear infinite;
-}
-.castle-vignette {
-  background: radial-gradient(ellipse at 62% 45%, transparent 42%, rgba(0, 0, 0, 0.7) 100%);
 }
 
 /* Muro de piedra con la luz de una antorcha */
